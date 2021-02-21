@@ -1,7 +1,31 @@
+/**@<symtab.c>::**/
+
+/*
+ * Bacharelado em Ciências da Computação
+ * UNESP Rio Claro
+ * Período Integral
+ * 
+ */
+
+/* 
+ * Desenvolvido pelo grupo 3:
+ * Bionda Rozin
+ * Matheus Missio Francisco
+ * Nicholas Seiti Handa
+ * Nikolas Gomes de Sá
+ * 
+ */
+  
+/*
+ * Data de criação: 21/02/2021
+ *
+ */
+
 #include <string.h>
 #include <stdio.h>
 #include <constants.h>
 #include <symtab.h>
+
 /*********************************
  * symtab.h::
 typedef
@@ -11,6 +35,7 @@ struct __symtab__ {
 }
 SYMTAB;
 *********************************/
+
 SYMTAB symtab[MAXSTBSIZE];
 int symtab_next_entry = 0;
 int symtab_lookup(const char *symbol)
