@@ -1,9 +1,31 @@
+/**@<pseudocode.c>::**/
+
+/*
+ * Bacharelado em Ciências da Computação
+ * UNESP Rio Claro
+ * Período Integral
+ * 
+ */
+
+/* 
+ * Desenvolvido pelo grupo 3:
+ * Bionda Rozin
+ * Matheus Missio Francisco
+ * Nicholas Seiti Handa
+ * Nikolas Gomes de Sá
+ * 
+ */
+  
+ /*
+  * Data de criação: 21/02/2021
+  *
+  */
+
 #include <stdio.h>
 #include <types.h>
 #include <pseudocode.h>
 
-void
-negate(int type)
+void negate(int type)
 {
     switch(type) {
     case BOOL:
@@ -25,8 +47,8 @@ negate(int type)
     	;
     }
 }
-void
-move(int type, const char *src, const char *dest)
+
+void move(int type, const char *src, const char *dest)
 {
     switch(type) {
     case BOOL:
@@ -48,8 +70,8 @@ move(int type, const char *src, const char *dest)
     	;
     }
 }
-void
-push(int type)
+
+void push(int type)
 {
     switch(type) {
     case BOOL:
@@ -71,8 +93,8 @@ push(int type)
     	;
     }
 }
-void
-add(int type)
+
+void add(int type)
 {
     switch(type) {
     case INT32:
@@ -91,8 +113,8 @@ add(int type)
     	;
     }
 }
-void
-sub(int type)
+
+void sub(int type)
 {
     switch(type) {
     case INT32:
@@ -111,8 +133,8 @@ sub(int type)
     	;
     }
 }
-void
-mul(int type)
+
+void mul(int type)
 {
     switch(type) {
     case INT32:
@@ -131,8 +153,8 @@ mul(int type)
     	;
     }
 }
-void
-divl(int type)
+
+void divl(int type)
 {
     switch(type) {
     case INT32:
@@ -151,8 +173,8 @@ divl(int type)
     	;
     }
 }
-void
-cmp(int type)
+
+void cmp(int type)
 {
     switch(type) {
     case BOOL:
@@ -174,17 +196,17 @@ cmp(int type)
     	;
     }
 }
-void 
-gofalse(int loopnumber)
+
+void gofalse(int loopnumber)
 {
     printf("\tgofalse .L%d\n", loopnumber);
 }
-void 
-mklabel(int loopnumber) {
+
+void mklabel(int loopnumber) {
     printf(".L%d:\n", loopnumber);
 }
-void 
-golabel(int loopnumber)
+
+void golabel(int loopnumber)
 {
     printf("\tgoto .L%d\n", loopnumber);
 }
