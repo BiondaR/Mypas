@@ -1,13 +1,25 @@
 /**@<lexer.c>::**/
-// Tue Nov 17 07:55:34 PM -03 2020
+
 /*
- * this is the start project for lexical analyser to be used
- * as the interface to the parser of the project mybc (my basic
- * calculator).
- *
- * In order to have a pattern scan we have first to implement
- * a method to ignore spaces.
+ * Bacharelado em Ciências da Computação
+ * UNESP Rio Claro
+ * Período Integral
+ * 
  */
+
+ /* 
+ * Desenvolvido pelo grupo 3:
+ * Bionda Rozin
+ * Matheus Missio Francisco
+ * Nicholas Seiti Handa
+ * Nikolas Gomes de Sá
+ * 
+ */
+  
+ /*
+  * Data de criação: 19/01/2021
+  *
+  */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,15 +27,35 @@
 #include <tokens.h>
 #include <constants.h>
 #include <keywords.h>
+#include <lexer.h>
+
+/* 
+ * The lexical analyser is responsible for reading the flow of characters
+ * that make up the program source and groups them into significant sequences, called lexemas. 
+ * For each lexema, the lexical analyser produces as output a token in the 
+ * format <name_token, value_atribute> that he moves on to the next step, 
+ * the syntactic analysis. In a token, the component name_token is an abstract symbol that 
+ * is used during the syntactic analysis, while the value_atribute refers to an entry in the 
+ * symbol table for this token.
+ * 
+ */
+
 int linecounter = 1;
-void skipspaces(FILE *tape)
+void skipunused(FILE *tape)
 {
   	int head;
- 
+	
+	_skip_spaces_head:
  	while ( isspace( head = getc(tape) ) ) {
-		if (head == '\n') linecounter++;
+		if (head == '\n') {
+			linecounter++;
+		}
 	}
- 
+	if ( head == '{' ) {
+		while ( (head = getc(tape)) != '}' && head != EOF ){
+		}
+		if (head == '}') { goto _skip_spaces_head; }
+	}
   	ungetc ( head, tape );
  
 }
@@ -302,7 +334,7 @@ int gettoken(FILE *source)
 {
 	int token;
 
-	skipspaces (source);
+	skipunused (source);
 
 	if ( (token = isID (source)) ) return token;
 
