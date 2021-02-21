@@ -1,5 +1,40 @@
+/**@<keywords.c>::**/
+
+/*
+ * Bacharelado em Ciências da Computação
+ * UNESP Rio Claro
+ * Período Integral
+ * 
+ */
+
+/* 
+ * Desenvolvido pelo grupo 3:
+ * Bionda Rozin
+ * Matheus Missio Francisco 
+ * Nicholas Seiti Handa
+ * Nikolas Gomes de Sá
+ * 
+ */
+  
+/*
+ * Data de criação: 21/02/2021
+ */
+
 #include <string.h>
 #include <keywords.h>
+
+/* 
+ * A linguagem Pascal possui palavras reservadas que denotam diferentes comandos
+ * e não podem ser utilizadas como identificadores. Essas palavras devem ser 
+ * reconhecidas pelo compilador.
+ * 
+ */
+
+/*
+ * Abaixo, estão definidas as palavras reservadas da gramática simplificada da
+ * linguagem Pascal.
+ * 
+ */
 
 char *keyword[] = { 
 	"begin",
@@ -25,6 +60,14 @@ char *keyword[] = {
 	"until",
 	"end",
 };
+
+/*
+ * A função iskeywords é responsável por comparar se uma palavra presente
+ * no código fonte é uma das palavras reservadas definidas acima. No
+ * caso positivo, a função retorna o valor correspondente à palavra escrita,
+ * definido em keywords.h. Caso contrário, apenas retorna o valor 0.
+ * 
+ */
 
 int iskeyword(const char *name)
 {
