@@ -1,11 +1,39 @@
 /**@<parser.c>::**/
 
+/*
+ * Bacharelado em Ciências da Computação
+ * UNESP Rio Claro
+ * Período Integral
+ * 
+ */
+
+ /* 
+ * Desenvolvido pelo grupo 3:
+ * Bionda Rozin
+ * Matheus Missio Francisco
+ * Nicholas Seiti Handa
+ * Nikolas Gomes de Sá
+ * 
+ */
+  
+ /*
+  * Data de criação: 21/02/2021
+  *
+  */
+
 #include <string.h>
 #include <constants.h>
 #include <keywords.h>
 #include <pseudocode.h>
 #include <symtab.h>
 #include <parser.h>
+
+/* 
+ * The syntatic analysis (parsing) is used for a formal analysis by some sentence or string, 
+ * according  to a formal grammar, resulting in a parse tree. The parsing step is important 
+ * to facilitate the process of compiling/interpreting a source code
+ * 
+ */
 
 /** iscompat table: **/
 /***************************************************************************************************
@@ -52,11 +80,21 @@ int iscompat(int acc_type, int syn_type)
 /*****************************************************************************
  * mypas -> PROGRAM ID ; declarative imperative .
  *****************************************************************************/
-void mypas(void) { match(PROGRAM); match(ID); match(';'); declarative(); imperative(); match ('.'); }
+void mypas(void) { 
+	match(PROGRAM);
+	match(ID);
+	match(';');
+	declarative();
+	imperative();
+	match ('.');
+}
 /*****************************************************************************
  * declarative -> vardecl sbpdecl
  *****************************************************************************/
-void declarative(void) { vardecl(); sbpdecl(); }
+void declarative(void) {
+	vardecl();
+	sbpdecl();
+}
 /*****************************************************************************
  * vardecl ->  [ VAR varlist : typemod ; { varlist : typemod ; } ]
  *****************************************************************************/
@@ -89,6 +127,7 @@ void symtab_insert(const char *symbol) {
 		semantic_error++;
 	}
 }
+
 void varlist(void)
 {
 	_match_id_head:
@@ -145,7 +184,10 @@ void sbpdecl(void)
 /*****************************************************************************
  * sbphead -> ID formparm
  *****************************************************************************/
-void sbphead(void) { match(ID); formparm(); }
+void sbphead(void) {
+	match(ID);
+	formparm(); 
+}
 /*****************************************************************************
  * formparm -> [ ( [VAR] varlist : typemod { ; [VAR] varlist : typemod } ) ]
  *****************************************************************************/
@@ -167,7 +209,11 @@ void formparm(void)
 /*****************************************************************************
  * sbptail -> declarative imperative ;
  *****************************************************************************/
-void sbptail(void) { declarative(); imperative(); match(';'); }
+void sbptail(void) {
+	declarative();
+	imperative();
+	match(';');
+}
 /*****************************************************************************
  * imperative -> BEGIN stmt { ; stmt } END
  *****************************************************************************/
@@ -267,6 +313,7 @@ int isrelop(void)
 	}
 	return 0;
 }
+
 int expr(int expr_type)
 {
 	/**/int relop; int left_type, right_type;/**/
@@ -286,6 +333,7 @@ int expr(int expr_type)
 	}
 	/**/return expr_type;/**/
 }
+
 /* smpexpr -> ['+''-'] term { (+) term } */
 int smpexpr(int smpexpr_type) 
 {
