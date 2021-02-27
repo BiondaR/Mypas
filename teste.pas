@@ -7,13 +7,16 @@ program Teste;
 	    t, w: double;
 
 	function fact(n: integer): integer;
-
+		{ declarative scope} 
+		var m: integer;
+		
 		{ imperative scope }
 		begin
 			if n > 2 then
-				fact := n * fact(n - 1)
+				m := n * fact(n - 1)
 			else
-				fact := n
+				m := n
+			return m;
 		end;
 
 	{ end declarative scope }
