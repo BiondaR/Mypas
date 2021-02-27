@@ -24,10 +24,28 @@
 #pragma once
 /* "Prevenção" contra includes e declarações repetidas" */
 
-/* Includes */
+/* Includes do sistema*/
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+/* Includes do projeto */
 #include <tokens.h>
+#include <constants.h>
+#include <keywords.h>
+#include <pseudocode.h>
+#include <symtab.h>
+
+/* Definição de constantes utilizadas no parser.c */
+enum {
+	INCOMPTBL = -1,
+	VOID,
+	BOOL,
+	INT32,
+	INT64,
+	FLT32,
+	FLT64,
+};
 
 /* Definição do cabeçalho de funções */
 void declarative(void);
