@@ -18,6 +18,8 @@
   
  /*
   * Data de criação: 21/02/2021
+  *  Atualizações:
+  * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21
   *
   */
 
@@ -428,7 +430,9 @@ int gettoken(FILE *source)
 
 	if ( (token = isRELOP (source)) ) return token;
 
-	token = getc (source);
+	lexeme[1] = 0;
+	
+	token = lexeme[0] = getc (source);
 
 	return token;
 }
