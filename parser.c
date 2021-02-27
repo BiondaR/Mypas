@@ -166,7 +166,7 @@ int typemod(void)
 }
 
 /*****************************************************************************
- * sbpdecl -> { PROCEDURE sbphead ; sbptail | FUNCTION sbphead : typemod ; sbptail }
+ * sbpdecl -> { PROCEDURE ID formparm ; declarative imperative ; | FUNCTION ID formparm : typemod ; declarative imperative ; }
  *****************************************************************************/
 void sbpdecl(void)
 {
