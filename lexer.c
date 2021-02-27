@@ -19,8 +19,8 @@
  /*
   * Data de criação: 21/02/2021
   *  Atualizações:
-  * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21
-  *
+  * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21;
+  *	*27/02/2021: Adição de comentários e de um contador de colunas;
   */
 
 #include <lexer.h>
@@ -36,7 +36,11 @@
  * 
  */
 
+/* O contador de colunas é incrementado a cada caractere lido da fita, em cada uma das funções presentes no lexer.c,
+ * é decrementado a cada caractere devolvido à fita e é resetado em 1 a cada nova linha iniciada
+ */
 int columncounter = 1;
+/* O contador de linhas é incrementado a cada caractere '\n' encontrado */
 int linecounter = 1;
 
 void skipunused(FILE *tape)
