@@ -24,3 +24,14 @@
 /* Definição de constantes */
 #define MAXIDLEN 32
 #define MAXSTBSIZE 0x10000
+
+/* Definição de constantes utilizadas no parser.c */
+enum {
+	INCOMPTBL = -1,
+	VOID,
+	BOOL,
+	INT32,
+	INT64,
+	FLT32,
+	FLT64,
+};
