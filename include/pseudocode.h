@@ -24,6 +24,12 @@
 #pragma once
 /* "Prevenção" contra includes e declarações repetidas" */
 
+/* Includes do sistema */
+#include <stdio.h>
+
+/* Includes do projeto */
+#include <types.h>
+
 /* Definição do cabeçalho de funções */
 void not(void);
 void negate(int);
