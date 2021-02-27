@@ -38,17 +38,6 @@
 #include <pseudocode.h>
 #include <symtab.h>
 
-/* Definição de constantes utilizadas no parser.c */
-enum {
-	INCOMPTBL = -1,
-	VOID,
-	BOOL,
-	INT32,
-	INT64,
-	FLT32,
-	FLT64,
-};
-
 /* Definição do cabeçalho de funções */
 void declarative(void);
 void imperative(void);
