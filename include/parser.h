@@ -65,6 +65,7 @@ int expr(int);
 int smpexpr(int);
 int term(int);
 int fact(int);
+
 void match(int expected);
 int gettoken(FILE *);
 
