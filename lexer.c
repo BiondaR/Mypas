@@ -36,18 +36,20 @@
  * 
  */
 
-/* O contador de colunas é incrementado a cada caractere lido da fita, em cada uma das funções presentes no lexer.c,
- * é decrementado a cada caractere devolvido à fita e é resetado em 1 a cada nova linha iniciada
+/* The column counter is incremented for each character read from the tape, in each of the functions present in lexer.c,
+ * is decremented for each character returned to the tape and is reseted to 1 for each new line started
  */
 int columncounter = 1;
-/* O contador de linhas é incrementado a cada caractere '\n' encontrado */
+/* The line counter is incremented when a '\n' character is found */
 int linecounter = 1;
 
+/* The function below ignores spaces and comments that may be present on the tape */
 void skipunused(FILE *tape)
 {
   	int head;
 	
 	_skip_spaces_head:
+	/* This section is responsible for ignoring space characters */
  	while ( isspace( head = getc(tape) ) ) {
 		if (head == '\n') {
 			columncounter = 1;
@@ -56,6 +58,7 @@ void skipunused(FILE *tape)
 			columncounter++;
 		}
 	}
+	/* This section is responsible for ignoring comments, whose structure is: {comment} */
 	if ( head == '{' ) {
 		while ( (head = getc(tape)) != '}' && head != EOF ){
 			if (head == '\n') {
@@ -65,6 +68,7 @@ void skipunused(FILE *tape)
 				columncounter++;
 			}
 		}
+		/* After the end of the comment, it will be checked if there are more spaces characters and/or new comments on the tape */
 		if (head == '}') { goto _skip_spaces_head; }
 	}
 	columncounter--;
@@ -84,8 +88,10 @@ void skipunused(FILE *tape)
  *            returns 0 otherwise
  */
 
+//comentar
 int lookahead;
 char lexeme[MAXIDLEN+1];
+
 int isID(FILE *tape)
 {
 	int i = 0;
@@ -123,6 +129,7 @@ int isID(FILE *tape)
 
 	return 0;
 }
+
 /* Next, we have to implement a method to recognize decimal
  * pattern (unsigned int)
  * 
@@ -442,33 +449,33 @@ int isHEX(FILE* tape){
 /* ASGN = ":=" */
 int isASGN(FILE *tape)
 {
-	/* Inicialmente o caractere ':' é esperado em uma atribuição */
+	/* Initially, the character ':' is expected in an assignment */
 	if ( (lexeme[0] = getc(tape)) == ':' ) {
 		columncounter++;
-		/* É checado se o próximo caractere é um '=' */
+		/* we check if the next character is a '=' */
 		if ( (lexeme[1] = getc(tape)) == '=' ) {
-			/* Caso seja, temos uma atribuição */
+			/* In this case, we have an assignment */
 			columncounter++;
 			lexeme[2] = 0;
 			return ASGN;
 		}
-		/* Caso contrário, não temos uma atribuição e o caractere lido é devolvido à fita */
+		/* Otherwise, we don't have an assignment and the character read is returned to the tape */
 		columncounter--;
 		ungetc(lexeme[1], tape);
 	}
-	/* Neste caso, o caractere lido não é ':' e, portanto, não há atribuição */
+	/* In this case, the character read is not ':' and there is no assignment */
 	columncounter--;
 	ungetc(lexeme[0], tape);
 	lexeme[0] = 0;
 	return 0;
 }
 
-/* Um operador relacional é utilizado para construir expressões booleanas
- * Em Pascal, um operador relacional pode ter um dos seguintes formatos:
+/* A relational operator is used to construct Boolean expressions
+ * In Pascal, a relational operator can have one of the following formats:
  * = (EQUAL)
- * > (GREATER THAN)
- * >= (GREATER THAN OR EQUAL)
- * < (LESS THAN)
+ *> (GREATER THAN)
+ *> = (GREATER THAN OR EQUAL)
+ * <(LESS THAN)
  * <= (LESS THAN OR EQUAL)
  * <> (NOT EQUAL)
  */
@@ -476,56 +483,55 @@ int isRELOP(FILE *tape)
 {
 	int i = 0;
 	switch (lexeme[i] = getc(tape)) {
-	/* Caso EQUAL */
+	/* Case EQUAL */
 	case '=':
 		columncounter++;
 		i++;
 		lexeme[i] = 0;
 		return '=';
-	/* Neste caso, o operador pode ser > ou >= */		
+	/* In this case, the operator can be > or >= */	
 	case '>':
 		columncounter++;	
 		i++;
-			
-		/* É verificado se o próximo caractere da fita é um '=' */	
+		/* We check if the next character on the tape is a '=' */
 		if ( (lexeme[i] = getc(tape)) == '=' ) {
-			/* Caso seja, é retornado GREATER THAN OR EQUAL */
+			/* If so, GREATER THAN OR EQUAL is returned */
 			columncounter++;
 			i++;
 			lexeme[i] = 0;
 			return GEQ;
 		}
-		/* Do contrário, o caractere lido é devolvido à fita e é retornado GREATER THAN */
+		/* Otherwise, the character read is returned to the tape and GREATER THAN is returned */
 		columncounter--;
 		ungetc(lexeme[i], tape);
 		lexeme[i] = 0;
 		return '>';
-	/* Neste caso, o operador pode ser <, <= ou <> */
+	/* In this case, the operator can be <, <= or <> */
 	case '<':
 		columncounter++;
 		i++;
-		/* É verificado se o próximo caractere da fita é um '=' */	
+		/* We check if the next character on the tape is a '=' */
 		if ( (lexeme[i] = getc(tape)) == '=' ) {
-			/* Caso seja, é retornado LESS THAN OR EQUAL */
+			/* If so, LESS THAN OR EQUAL is returned */
 			columncounter++;
 			i++;
 			lexeme[i] = 0;
 			return LEQ;
-		/* Caso a primeira verificação seja negativa, é verificado se o próximo caractere da fita é um '>' */	
+		/* We check, then, if the next character on the tape is a '>' */
 		} else if ( lexeme[i] == '>') {
-			/* Caso seja, é retornado NOT EQUAL */
+			/* If so, NOT EQUAL is returned */
 			columncounter++;
 			i++;
 			lexeme[i] = 0;
 			return NEQ;
 		}
-		/* Do contrário, o caractere lido é devolvido à fita e é retornado LESS THAN */
+		/* Otherwise, the character read is returned to the tape and LESS THAN is returned */ 
 		columncounter--;
 		ungetc(lexeme[i], tape);
 		lexeme[i] = 0;
 		return '<';
 	}
-	/* Caso nenhuma das verificações seja verdadeira, o caractere lido é devolvido à fita e é retornado 0 */
+	/* If none of the checks are true, the character read is returned to the tape and 0 is returned */
 	columncounter--;
 	ungetc(lexeme[i], tape);
 	return lexeme[i] = 0;
