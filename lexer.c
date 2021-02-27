@@ -17,7 +17,7 @@
   */
   
  /*
-  * Data de criação: 19/01/2021
+  * Data de criação: 21/02/2021
   *
   */
 
@@ -67,6 +67,8 @@ void skipunused(FILE *tape)
  * isalnum(x) returns 1 if x \in [A-Za-z0-9]
  *            returns 0 otherwise
  */
+
+int lookahead;
 char lexeme[MAXIDLEN+1];
 int isID(FILE *tape)
 {
