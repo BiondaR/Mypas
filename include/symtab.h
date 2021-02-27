@@ -42,7 +42,6 @@ typedef struct __symtab__ {
     char offset[MAXIDLEN+1];
     int type;
     int data_size;
-    /** inserted on feb 17th: **/
     int lexical_level;
     int objtype;
     int transp_type;
@@ -50,7 +49,6 @@ typedef struct __symtab__ {
 SYMTAB;
 
 /* Definição do cabeçalho de funções. */
-// int symtab_rtrvtype(const char *symbol, int lexical_level);
 int symtab_lookup ( const char*);
 int symtab_append(const char *symbol, int lexical_level, int objtype, int transp_type);
 void symtab_update_type(int, int);
