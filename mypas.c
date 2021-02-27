@@ -23,7 +23,6 @@
 
 #include <mypas.h>
 
-int lookahead;
 FILE *source;
 int main (int argc, char const *argv[])
 {
