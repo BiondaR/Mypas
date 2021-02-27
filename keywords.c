@@ -45,6 +45,7 @@ char *keyword[] = {
 	"program",
 	"procedure",
 	"function",
+	"return",
 	"var",
 	"integer",
 	"real",
