@@ -21,8 +21,6 @@
   *
   */
 
-#include <stdio.h>
-#include <types.h>
 #include <pseudocode.h>
 
 void negate(int type)
