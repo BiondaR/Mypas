@@ -18,6 +18,8 @@
   
  /*
   * Data de criação: 21/02/2021
+  * Atualizações:
+  * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21
   *
   */
 
@@ -41,6 +43,7 @@ enum {
 	PROGRAM,
 	PROCEDURE,
 	FUNCTION,
+	RETURN,
 	VAR,
 	INTEGER,
 	REAL,
