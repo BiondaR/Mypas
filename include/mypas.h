@@ -24,11 +24,16 @@
 #pragma once
 /* "Prevenção" contra includes e declarações repetidas" */
 
-/* Includes */
+/* Includes do sistema */
 #include <stdio.h>
 #include <stdlib.h>
+
+/* Include do projeto */
 #include <tokens.h>
 
 /* Definição do cabeçalho de funções */
 int gettoken(FILE *);
 void mypas(void);
+
+/* Declaração de variáveis */
+extern int lookahead;
