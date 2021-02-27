@@ -24,6 +24,9 @@
 #pragma once
 /* "Prevenção" contra includes e declarações repetidas" */
 
+/* Includes do sistema */
+#include <string.h>
+
 /* Definição do cabeçalho da função iskeywors */
 int iskeyword(const char *);
 
