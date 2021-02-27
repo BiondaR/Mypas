@@ -20,7 +20,6 @@
  * Data de criação: 21/02/2021
  */
 
-#include <string.h>
 #include <keywords.h>
 
 /* 
