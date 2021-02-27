@@ -6,19 +6,6 @@ program Teste;
 	    x, y: real;
 	    t, w: double;
 
-	procedure A;
-		
-		{ initiate declarative scope }
-		var abacaxi: integer;
-
-		{ imperative scope }
-		begin
-			abacaxi := j;
-
-			writeln abacaxi
-
-		end;
-
 	function fact(n: integer): integer;
 
 		{ imperative scope }
