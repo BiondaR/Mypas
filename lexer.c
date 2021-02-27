@@ -21,13 +21,6 @@
   *
   */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <tokens.h>
-#include <constants.h>
-#include <keywords.h>
 #include <lexer.h>
 
 /* 
@@ -41,7 +34,9 @@
  * 
  */
 
+int columncounter = 1;
 int linecounter = 1;
+
 void skipunused(FILE *tape)
 {
   	int head;
@@ -426,6 +421,8 @@ int gettoken(FILE *source)
 	if ( (token = isHEX (source)) ) return token;
 
 	if ( (token = isNUM (source)) ) return token;
+	
+	if ( (token = isASGN (source)) ) return token;
 
 	if ( (token = isRELOP (source)) ) return token;
 
