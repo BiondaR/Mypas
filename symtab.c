@@ -63,7 +63,7 @@ int symtab_entry;
 int symtab_append(const char *symbol, int lexical_level, int objtype, int transp_type) {
     if ( symtab_lookup(symbol) < 0 || symtab[symtab_entry].lexical_level <= lexical_level) {
         strcpy(symtab[symtab_next_entry].symbol, symbol);
-        sprintf(symtab[symtab_next_entry].offset, "%s[%d]", symbol, lexical_level);
+        sprintf(symtab[symtab_next_entry].offset, "%s[%d]", symbol, lexical_level); //é so um debug, pode ser melhorado
         symtab[symtab_next_entry].lexical_level = lexical_level;
         symtab[symtab_next_entry].objtype = objtype;
         symtab[symtab_next_entry].transp_type = transp_type;
