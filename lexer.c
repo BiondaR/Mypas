@@ -235,7 +235,7 @@ int isNUM(FILE* tape){
             /* We give back the non-digit character to the tape and the next step 
              * is to check if there is an exponential expression in sequence
              */
-	    columncounter-;
+	    columncounter--;
             ungetc(lexeme[i], tape);
             lexeme[i] = 0;
         }
@@ -302,7 +302,7 @@ int isNUM(FILE* tape){
 		    }
                 }
                 /* We give back the character that isn't a digit to the tape */
-		columncounter-;
+		columncounter--;
                 ungetc(lexeme[i], tape);
                 lexeme[i] = 0;
             }
