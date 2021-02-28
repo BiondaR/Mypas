@@ -215,7 +215,7 @@ int isNUM(FILE* tape){
     /* In this case, the imminent character of the tape is a point, 
      * so we should expect at least one digit before classifying it as FLOAT 
      */
-    else if((lexeme[i] = getc(tape)) == '.'){]
+    else if((lexeme[i] = getc(tape)) == '.'){
 	columncounter++;
         i++;
 
