@@ -15,7 +15,7 @@ program Teste;
 			if n > 2 then
 				m := n * fact(n - 1)
 			else
-				m := n
+				m := n;
 			return m;
 		end;
 
