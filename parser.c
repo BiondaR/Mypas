@@ -594,10 +594,7 @@ char* tokenType(int expected) {
 /* The match function is responsible for comparing the lookahead with the token expected by an expression/term/factor */
 void match(int expected)
 {	
-	if (lookahead == expected) {
-		lookahead = gettoken(source);
-	/* Token mismatch */
-	} else {
+	if (lookahead =! expected) {
 		char *token_expected;
 		char *token_lookahead;
 	
@@ -610,9 +607,8 @@ void match(int expected)
 			fprintf(stderr,"token mismatch: expected %s whereas found %s\n",
 		token_expected, token_lookahead);
 		}
-	
-		/* Analysis of next buffer token */
-		lookahead = gettoken (source);
-		mypas();
 	}
+	
+	/* Analysis of next buffer token */
+	lookahead = gettoken(source);
 }
