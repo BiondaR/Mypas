@@ -63,12 +63,11 @@ char *keyword[] = {
 	"end",
 };
 
+
 /*
- * A função iskeywords é responsável por comparar se uma palavra presente
- * no código fonte é uma das palavras reservadas definidas acima. No
- * caso positivo, a função retorna o valor correspondente à palavra escrita,
- * definido em keywords.h. Caso contrário, apenas retorna o valor 0.
- * 
+ * The function keywords is responsable to compare if given word is one of the reserved words defined above. 
+ * n the case of a match, this function returns the value corresponding to the word matched, 
+ * defined in keywords.h. Otherwise, it returns the value 0.
  */
 
 int iskeyword(const char *name)
