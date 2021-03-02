@@ -23,6 +23,9 @@
   *
   */
 
+#pragma once
+/* "Prevenção" contra includes e declarações repetidas" */
+
 /* Definição de constantes */
 #define MAXIDLEN 32
 #define MAXSTBSIZE 0x10000
