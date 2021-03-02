@@ -9,6 +9,8 @@
 # Nikolas Gomes de Sá
   
 # Data de criação: 21/02/2021
+# Atualizações:
+# 02/03/2021: Adição de comentários.
 
 # Set default C-Flags to allow debug and also to have include diretory as "./include"
 # The -g directive used for debugging, associates each line of code or ';' with a node in a graph
