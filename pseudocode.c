@@ -23,6 +23,12 @@
 
 #include <pseudocode.h>
 
+/* 
+ * The pseudocode is a result of the efficient modularization of the parser, 
+ * which aims to encapsulate the methods and organize the code, one of the possible applications 
+ * of this program is to transform a 'printf' into a primitive, in other words, a semantic action being reduced.
+*/
+
 void negate(int type)
 {
     switch(type) {

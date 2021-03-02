@@ -88,8 +88,12 @@ void skipunused(FILE *tape)
  *            returns 0 otherwise
  */
 
-//comentar
+/* The 'lookahead' variable gets each word/ID/number/etc of the tape. The lexeme is compared to the expected term and, 
+* if it didn't match, there is a semantic error (token mismatch).
+*/
 int lookahead;
+
+/* The 'lexeme' variable is used to read each character/word in the tape and those words will go through a lexical analysis. */
 char lexeme[MAXIDLEN+1];
 
 int isID(FILE *tape)
@@ -215,7 +219,7 @@ int isNUM(FILE* tape){
     /* In this case, the imminent character of the tape is a point, 
      * so we should expect at least one digit before classifying it as FLOAT 
      */
-    else if((lexeme[i] = getc(tape)) == '.'){]
+    else if((lexeme[i] = getc(tape)) == '.'){
 	columncounter++;
         i++;
 
@@ -235,7 +239,7 @@ int isNUM(FILE* tape){
             /* We give back the non-digit character to the tape and the next step 
              * is to check if there is an exponential expression in sequence
              */
-	    columncounter-;
+	    columncounter--;
             ungetc(lexeme[i], tape);
             lexeme[i] = 0;
         }
@@ -302,7 +306,7 @@ int isNUM(FILE* tape){
 		    }
                 }
                 /* We give back the character that isn't a digit to the tape */
-		columncounter-;
+		columncounter--;
                 ungetc(lexeme[i], tape);
                 lexeme[i] = 0;
             }

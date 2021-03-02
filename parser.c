@@ -252,6 +252,7 @@ void rtrn(void)
 {
     match(RETURN); 
     expr(VOID);
+    match(';');
 }
 
 /*****************************************************************************
@@ -533,15 +534,85 @@ int fact(int fact_type)
     return fact_type;
 }
 
-//colocar tokentype aqui e adaptar o match
+/* This function is used to replace the token value by its correspondant string.*/
+char* tokenType(int expected) {
+	char* token_expected;
 
+	switch(expected) {
+	case ID:
+		token_expected = "ID";
+		break;
+	case UINT:
+		token_expected = "UINT";
+		break;
+	case FLOAT:
+		token_expected = "FLOAT";
+		break;
+	case OCT:
+		token_expected = "OCT";
+		break;
+	case HEX:
+		token_expected = "HEX";
+		break;
+	case ('('):
+		token_expected = "(";
+		break;    
+	case (')'):
+		token_expected = ")";
+		break;
+	case (ASGN):
+		token_expected = ":=";
+		break;
+	case (GEQ):
+		token_expected = ">=";
+		break;
+	case ('='):
+		token_expected = "=";
+		break;
+	case ('>'):
+		token_expected = ">";
+		break;
+	case (LEQ):
+		token_expected = "<=";
+		break;
+	case ('<'):
+		token_expected = "<";
+		break;
+	case (NEQ):
+		token_expected = "<>=";
+		break;
+	case (-1):
+		token_expected = "EOF";
+		break;
+	default:
+		token_expected = "CHAR";
+		break;
+	}
+	return token_expected;
+}  
+
+/* The match function is responsible for comparing the lookahead with the token expected by an expression/term/factor */
 void match(int expected)
-{
-    if (lookahead == expected) {
-        lookahead = gettoken(source);
-    } else {
-        fprintf(stderr, "token mismatch: expected %d whereas found %d\n",
-                expected, lookahead);
-        exit(-2);
-    }
+{	
+	if (lookahead == expected) {
+		lookahead = gettoken(source);
+	/* Token mismatch */
+	} else {
+		char *token_expected;
+		char *token_lookahead;
+	
+		token_expected = tokenType(expected);
+		token_lookahead = tokenType(lookahead);
+		if(token_lookahead == "CHAR") {
+			fprintf(stderr,"token mismatch: expected %s whereas found %c\n",
+		token_expected, lookahead);
+		} else {
+			fprintf(stderr,"token mismatch: expected %s whereas found %s\n",
+		token_expected, token_lookahead);
+		}
+	
+		/* Analysis of next buffer token */
+		lookahead = gettoken (source);
+		mypas();
+	}
 }
