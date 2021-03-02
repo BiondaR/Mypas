@@ -88,8 +88,12 @@ void skipunused(FILE *tape)
  *            returns 0 otherwise
  */
 
-//comentar
+/* The 'lookahead' variable gets each word/ID/number/etc of the tape. The lexeme is compared to the expected term and, 
+* if it didn't match, there is a semantic error (token mismatch).
+*/
 int lookahead;
+
+/* The 'lexeme' variable is used to read each character/word in the tape and those words will go through a lexical analysis. */
 char lexeme[MAXIDLEN+1];
 
 int isID(FILE *tape)
