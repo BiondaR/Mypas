@@ -594,7 +594,7 @@ char* tokenType(int expected) {
 /* The match function is responsible for comparing the lookahead with the token expected by an expression/term/factor */
 void match(int expected)
 {	
-	if (lookahead =! expected) {
+	if (lookahead != expected) {
 		char *token_expected;
 		char *token_lookahead;
 	
