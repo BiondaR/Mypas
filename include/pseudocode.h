@@ -28,7 +28,7 @@
 #include <stdio.h>
 
 /* Includes do projeto */
-#include <types.h>
+#include <constants.h>
 
 /* Definição do cabeçalho de funções */
 void not(void);
