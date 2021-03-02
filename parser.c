@@ -585,6 +585,72 @@ char* tokenType(int expected) {
 	case (-1):
 		token_expected = "EOF";
 		break;
+	case BEGIN:
+		token_expected = "BEGIN";
+		break;
+	case NOT:
+		token_expected = "NOT";
+		break;
+	case OR:
+		token_expected = "OR";
+		break;
+	case AND:
+		token_expected = "AND";
+		break;
+	case DIV:
+		token_expected = "DIV";
+		break;
+	case MOD:
+		token_expected = "MOD";
+		break;    
+	case PROGRAM:
+		token_expected = "PROGRAM";
+		break;
+	case PROCEDURE:
+		token_expected = "PROCEDURE";
+		break;
+	case FUNCTION:
+		token_expected = "FUNCTION";
+		break;
+	case RETURN:
+		token_expected = "RETURN";
+		break;
+    	case VAR:
+		token_expected = "VAR";
+		break;
+    	case INTEGER:
+		token_expected = "INTEGER";
+		break;
+    	case REAL:
+		token_expected = "REAL";
+		break;
+    	case DOUBLE:
+		token_expected = "DOUBLE";
+		break;
+    	case BOOLEAN:
+		token_expected = "BOOLEAN";
+		break;
+    	case IF:
+		token_expected = "IF";
+		break;
+    	case THEN:
+		token_expected = "THEN";
+		break;
+    	case ELSE:
+		token_expected = "ELSE";
+		break;
+    	case WHILE:
+		token_expected = "WHILE";
+		break;
+    	case DO:
+		token_expected = "DO";
+		break;
+   	case REPEAT:
+		token_expected = "REPEAT";
+		break;
+   	case UNTIL:
+		token_expected = "UNTIL";
+		break;
 	default:
 		token_expected = "CHAR";
 		break;
