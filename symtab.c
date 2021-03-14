@@ -68,19 +68,27 @@ int symtab_lookup(const char *symbol)
  * Adding Symbol information in symbol table
  *****************************************************************************/
 int symtab_append(const char *symbol, int lexical_level, int objtype, int transp_type) {
-    if ( symtab_lookup(symbol) < 0 || symtab[symtab_entry].lexical_level <= lexical_level) {
+    
+    if(symtab_next_entry < MAXSTBSIZE){
+        if ( symtab_lookup(symbol) < 0 || symtab[symtab_entry].lexical_level <= lexical_level) {
         strcpy(symtab[symtab_next_entry].symbol, symbol);
-        sprintf(symtab[symtab_next_entry].offset, "%s[%d]", symbol, lexical_level); //é so um debug, pode ser melhorado
+        sprintf(symtab[symtab_next_entry].offset, " %s[%d]", symbol, lexical_level); //é so um debug, pode ser melhorado
         symtab[symtab_next_entry].lexical_level = lexical_level;
         symtab[symtab_next_entry].objtype = objtype;
         symtab[symtab_next_entry].transp_type = transp_type;
         return symtab_next_entry++;
-    } else {
+        } else {
 	    /* essa parte pode ser modularizada (aula  17/2 min 11) */
         fprintf(stderr, "symtab_append: %s multiply defined in current lexical level %d\n", symbol, lexical_level);
         semantic_error++;
         return -2;
+        }
     }
+
+    else {
+        printf("Symtab overflow");
+    }
+   
 }
 
 /*****************************************************************************

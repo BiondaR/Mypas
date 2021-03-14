@@ -105,13 +105,13 @@ void add(int type)
         printf("\taddl auxl, accl\n");
     	break;
     case INT64:
-        printf("\taddq auxq, accq\n");
+        printf("\taddl auxl, accl\n");
     	break;
     case FLT32:
-        printf("\taddf auxf, accf\n");
+        printf("\taddl auxl, accl\n");
     	break;
     case FLT64:
-        printf("\tadddf auxdf, accdf\n");
+        printf("\taddl auxl, accl\n");
     	break;
     default:
     	;

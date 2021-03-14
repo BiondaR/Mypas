@@ -450,7 +450,8 @@ int term(int term_type)
  *       | n
  *       | v [ = expr ]
  */
-int getnumtype(const char *); //IMPLEMENTAR
+void getnumtype(int fact_type, int type); //IMPLEMENTAR
+
 
 int fact(int fact_type) 
 {
@@ -476,8 +477,7 @@ int fact(int fact_type)
             break;
         case FLOAT:
             /***/fact_type = iscompat(fact_type, FLT32);/***/
-            /**/move(fact_type, lexeme, "acc");/**/
-            
+            /**/move(fact_type, lexeme, "acc");/**/            
             match(FLOAT);
             break;
         default:
@@ -534,6 +534,8 @@ int fact(int fact_type)
     }
     return fact_type;
 }
+
+
 
 /* This function is used to replace the token value by its correspondant string.*/
 char* tokenType(int expected) {
@@ -668,11 +670,11 @@ void match(int expected)
 		token_expected = tokenType(expected);
 		token_lookahead = tokenType(lookahead);
 		if(token_lookahead == "CHAR") {
-			fprintf(stderr,"token mismatch: expected %s whereas found %c\n",
-		token_expected, lookahead);
+			fprintf(stderr,"%d %d: token mismatch: expected %s whereas found %c\n",
+		linecounter, columncounter, token_expected, lookahead);
 		} else {
-			fprintf(stderr,"token mismatch: expected %s whereas found %s\n",
-		token_expected, token_lookahead);
+			fprintf(stderr,"%d %d: token mismatch: expected %s whereas found %s\n",
+		linecounter, columncounter, token_expected, token_lookahead);
 		}
 	}
 	

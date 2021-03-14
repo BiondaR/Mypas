@@ -64,3 +64,5 @@ int gettoken(FILE *);
 extern int lookahead;
 extern char lexeme[];
 extern FILE *source;
+extern int linecounter;
+extern int columncounter;

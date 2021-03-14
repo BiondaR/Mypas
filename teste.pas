@@ -12,8 +12,8 @@ program Teste;
 		
 		{ imperative scope }
 		begin
-			if n > 2 then
-				m := n * fact(n - 1)
+			if n < 2 then
+				m := n * fact(n + 1)
 			else
 				m := n;
 			return m;
