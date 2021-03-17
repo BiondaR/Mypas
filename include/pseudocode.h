@@ -28,6 +28,7 @@
 #include <stdio.h>
 
 /* Includes do projeto */
+#include <tokens.h>
 #include <constants.h>
 
 /* Definição do cabeçalho de funções */
