@@ -47,11 +47,14 @@ int linecounter = 1;
 /* The function below ignores spaces and comments that may be present on the tape */
 void skipunused(FILE *tape)
 {
+    /* If reads some space or comment, then sets flag in 1. It means that columncounter will be decreased later */
+    int flag = -1;
   	int head;
 	
 	_skip_spaces_head:
 	/* This section is responsible for ignoring space characters */
  	while ( isspace( head = getc(tape) ) ) {
+        flag++;
 		if (head == '\n') {
 			columncounter = 1;
 			linecounter++;
@@ -61,6 +64,7 @@ void skipunused(FILE *tape)
 	}
 	/* This section is responsible for ignoring comments, whose structure is: {comment} */
 	if ( head == '{' ) {
+        flag++;
 		while ( (head = getc(tape)) != '}' && head != EOF ){
 			if (head == '\n') {
 				columncounter = 1;
@@ -72,9 +76,10 @@ void skipunused(FILE *tape)
 		/* After the end of the comment, it will be checked if there are more spaces characters and/or new comments on the tape */
 		if (head == '}') { goto _skip_spaces_head; }
 	}
-	columncounter--;
+    if ( flag >= 1 ){
+        columncounter--;
+    }
   	ungetc ( head, tape );
- 
 }
 
 /* Now we need a predicate function to recognize a string
@@ -118,20 +123,19 @@ int isID(FILE *tape)
 		/* So we consume all the characters and just return the last character 
          	* read that it doesn't fit this category. 
          	*/
-		columncounter--;
 		ungetc ( lexeme[i], tape );
 		lexeme[i] = 0;
 		/* We make a last test to verify if the ID read is a reserved word.
 		 * If so, we return the reserved word */
 		int token = iskeyword(lexeme);
-		if (token) return token;
+		if (token){
+            return token;
+        }
 		/* If not, we return ID */
 		return ID;
 	}
 	/* In this case, the character of the tape was not a letter. Therefore, we just give it back and return 0. */
-	columncounter--;
 	ungetc ( lexeme[i], tape );
-
 	return 0;
 }
 
@@ -147,28 +151,25 @@ int isUINT(FILE* tape){
         /* If the digit read is 0, only returns UINT. Otherwise, we will continue accepting all 
          * digits that will come, checking only if the size doesn't exceed the limit of MAXIDLEN.
          */
+        columncounter++;
         if(lexeme[i] == '0'){
-	    columncounter++;
             i++;
             lexeme[i] = 0;
         }
         else{
-	    columncounter++;
             i++;
             while(isdigit(lexeme[i] = getc(tape))){
                 if(i < MAXIDLEN){
-			columncounter++;
-			i++;
-		}
+			        columncounter++;
+			        i++;
+		        }
             }
-            columncounter--;
             ungetc(lexeme[i], tape);
             lexeme[i] = 0;
         }
         return UINT;
     }
     /* In this case, the tape character was not a digit. So we just give it back and return 0. */
-    columncounter--;
     ungetc(lexeme[i], tape);
     return 0;
 }
@@ -189,7 +190,7 @@ int isNUM(FILE* tape){
         i += strlen(lexeme);
         /* If there is a '.' after the integer part, the other digits characters are consumed */
         if((lexeme[i] = getc(tape)) == '.'){
-	    columncounter++;
+	        columncounter++;
             i++;
             token = FLOAT;
             /* At this stage, we can already consider it as FLOAT and while the imminent character of the tape is a digit, 
@@ -197,14 +198,13 @@ int isNUM(FILE* tape){
              */
             while(isdigit(lexeme[i] = getc(tape))){
                 if(i < MAXIDLEN){
-			columncounter++;
-			i++;
-		}
+			        columncounter++;
+			        i++;
+		        }
             }
             /* We return the non-digit character to the tape and the next step 
              * is to check if there is an exponential expression in sequence
              */
-	    columncounter--;
             ungetc(lexeme[i], tape);
             lexeme[i] = 0;
         }
@@ -212,7 +212,6 @@ int isNUM(FILE* tape){
          * the next step is to look for an exponential expression in sequence, which would make it FLOAT.
          */
         else{
-	    columncounter--;
             ungetc(lexeme[i], tape);
             lexeme[i] = 0;
         }
@@ -221,11 +220,11 @@ int isNUM(FILE* tape){
      * so we should expect at least one digit before classifying it as FLOAT 
      */
     else if((lexeme[i] = getc(tape)) == '.'){
-	columncounter++;
+	    columncounter++;
         i++;
 
         if(isdigit(lexeme[i] = getc(tape))){
-	    columncounter++;
+	        columncounter++;
             i++;
             token = FLOAT;
             /* At this stage, we can already consider it as FLOAT and while the imminent character of the tape is a digit, we will continue
@@ -240,7 +239,6 @@ int isNUM(FILE* tape){
             /* We give back the non-digit character to the tape and the next step 
              * is to check if there is an exponential expression in sequence
              */
-	    columncounter--;
             ungetc(lexeme[i], tape);
             lexeme[i] = 0;
         }
@@ -248,7 +246,7 @@ int isNUM(FILE* tape){
          * and will only return 
          */
         else{
-            columncounter-=2;
+            columncounter--;
             ungetc(lexeme[i], tape);
             lexeme[i] = 0;
             ungetc('.', tape);
@@ -258,7 +256,6 @@ int isNUM(FILE* tape){
      * and will only return 
      */
     else{
-	columncounter--;
         ungetc(lexeme[i], tape);
         lexeme[i] = 0;
     }
@@ -271,30 +268,29 @@ int isNUM(FILE* tape){
         /* If the character 'e' or 'E' is identified */
         if(toupper(lexeme[i] = e = getc(tape)) == 'E'){
             if(i < MAXIDLEN){
-		    columncounter++;
-		    i++;
-	    }
+		        columncounter++;
+		        i++;
+	        }
 		
             int plusminus;
             /* We use an auxiliary variable (plusminus) in case it's necessary to give back the character to the tape */
             if((lexeme[i] = plusminus = getc(tape)) == '+' || plusminus == '-'){
                 if(i < MAXIDLEN){
-			columncounter++;
-			i++;
-		}
+			        columncounter++;
+			        i++;
+		        }
             }
             /* In case we don't receive an oplus from the tape and give back the character */
             else{
-		columncounter--;
                 ungetc(plusminus, tape);
                 plusminus = 0;
             }
             /* To be exponential part, we must receive at least one digit after the 'e' or 'E' character */
             if(isdigit(lexeme[i] = getc(tape))){
                 if(i < MAXIDLEN){
-			columncounter++;
-			i++;
-		}
+			        columncounter++;
+			        i++;
+		        }
 		    
                 token = FLOAT;
                 /* At this stage, we can already consider it as FLOAT and while the imminent character of the tape is a digit, we will continue
@@ -302,33 +298,30 @@ int isNUM(FILE* tape){
                  */
                 while(isdigit(lexeme[i] = getc(tape))){
                     if(i < MAXIDLEN){
-			    columncounter++;
-			    i++;
-		    }
+			            columncounter++;
+			            i++;
+		            }
                 }
                 /* We give back the character that isn't a digit to the tape */
-		columncounter--;
                 ungetc(lexeme[i], tape);
                 lexeme[i] = 0;
             }
             /* We say that the sequence doesn't characterize an exponential part, so we will give the characters back to the tape */
             else{
-		columncounter--;
                 ungetc(lexeme[i], tape);        /* Character isn't digit */
                 i--;
                 if(plusminus){                  /* If we receive an oplus, we give it back */
                     i--;
-		    columncounter--;
+		            columncounter--;
                     ungetc(plusminus, tape);
                 }
                 i--;
-		columncounter--;
+		        columncounter--;
                 ungetc(e, tape);                /* Decrement i and gives 'e' or 'E' back */
             }
         }
         /* Give back 'e' or 'E' */
-        else{
-	    columncounter--;	
+        else{	
             ungetc(e, tape);
         }
     }
@@ -344,13 +337,13 @@ int isOCT(FILE* tape){
     /* Initially, a '0' is expected to characterize the Octal pattern */
     if((lexeme[i] = getc(tape)) == '0'){
         i++;
-	columncounter++;
+	    columncounter++;
         /* We increase i to store the imminent character of the tape at the next vector position 
          * and check that it is in the [0-7] range. 
          */
         if(isdigit(lexeme[i] = getc(tape)) && lexeme[i] <= '7'){
             i++;
-	    columncounter++;	
+	        columncounter++;	
             /* At this stage, while the imminent character of the tape is an octal digit, we will continue
              * accepting it, since i doesn't exceed the maximum vector size (MAXIDLEN)
              */
@@ -362,8 +355,7 @@ int isOCT(FILE* tape){
             }
             /* So we consume all the octal digits and just give back the last character 
              * read that it doesn't fit this category. Finally, we return the OCT classification. 
-             */
-	    columncounter--;	
+             */	
             ungetc(lexeme[i], tape);
             lexeme[i] = 0;
             return OCT;
@@ -372,7 +364,7 @@ int isOCT(FILE* tape){
             /* The first character read from the tape didn't correspond to an octal digit, therefore, 
              * we will give back the characters read to the tape and return 0 (Not Octal)
              */
-	    columncounter-=2;
+	        columncounter--;
             ungetc(lexeme[i], tape);    /* Non octal character */
             i--;
             ungetc('0', tape);          /* Decrement i and gives '0' back */
@@ -381,7 +373,6 @@ int isOCT(FILE* tape){
         }
     }
     /* The tape character didn't match '0', so we give back the character read to the tape and return 0 (Not Octal) */
-    columncounter--;	
     ungetc(lexeme[i], tape);
     lexeme[i] = 0;
     return 0;
@@ -394,33 +385,32 @@ int isHEX(FILE* tape){
     int i = 0;
     /* Initially a '0' is expected to characterize the Hexadecimal pattern */
     if((lexeme[i] = getc(tape)) == '0'){
-	columncounter++;
+	    columncounter++;
         i++;
         /* We increment i to store the imminent character of the tape at the next vector position 
          * and check if it is 'x' or 'X'. 
          */
         if(toupper(lexeme[i] = getc(tape)) == 'X'){
-	    columncounter++;	
+	        columncounter++;	
             i++;
             /* We increment i to store the imminent character of the tape at the next vector position 
              * and check if the character is a hexadecimal digit. 
              */
             if(isxdigit(lexeme[i] = getc(tape))){
-		columncounter++;    
+		    columncounter++;    
                 i++;
                 /* At this stage, while the imminent character of the tape is a hexadecimal digit, we will continue
                  * accepting it, since i doesn't exceed the maximum size of the vector (MAXIDLEN)
                  */
                 while(isxdigit(lexeme[i] = getc(tape))){
                     if(i < MAXIDLEN){
-			    columncounter++;
-			    i++;
-		    }
+			            columncounter++;
+			            i++;
+		            }
                 }
                 /* Therefore, we consume all hexadecimal digits and only give back the last character 
                  * read that it doesn't fit this category. Finally, we return the HEX classification 
-                 */
-		columncounter--;    
+                 */  
                 ungetc(lexeme[i], tape);
                 lexeme[i] = 0;
                 return HEX;
@@ -429,7 +419,7 @@ int isHEX(FILE* tape){
                 /* The first character read from the tape didn't correspond to a hexadecimal digit, therefore, 
                  * we will return the characters read to the tape and return 0 (Not Hexadecimal)
                  */
-		columncounter-=3;    
+		        columncounter-=2;    
                 ungetc(lexeme[i], tape);        /* Non-hexadecimal character */
                 i--;
                 ungetc(lexeme[i], tape);        /* Decrement i and gives back 'x' or 'X' */
@@ -440,13 +430,12 @@ int isHEX(FILE* tape){
             }
         }
         /* The tape character didn't match 'x' or 'X', so we give back the characters read to the tape and return 0 (Not HexaDecimal) */
-	columncounter-=2;    
+	    columncounter--;    
         ungetc(lexeme[i], tape);
         ungetc('0', tape);
         return 0;
     }
-    /* The first character of the tape isn't '0' and therefore not Hexadecimal */
-    columncounter--;	
+    /* The first character of the tape isn't '0' and therefore not Hexadecimal */	
     ungetc(lexeme[i], tape);
     return 0;
 }
@@ -469,7 +458,6 @@ int isASGN(FILE *tape)
 		ungetc(lexeme[1], tape);
 	}
 	/* In this case, the character read is not ':' and there is no assignment */
-	columncounter--;
 	ungetc(lexeme[0], tape);
 	lexeme[0] = 0;
 	return 0;
@@ -507,7 +495,6 @@ int isRELOP(FILE *tape)
 			return GEQ;
 		}
 		/* Otherwise, the character read is returned to the tape and GREATER THAN is returned */
-		columncounter--;
 		ungetc(lexeme[i], tape);
 		lexeme[i] = 0;
 		return '>';
@@ -531,13 +518,11 @@ int isRELOP(FILE *tape)
 			return NEQ;
 		}
 		/* Otherwise, the character read is returned to the tape and LESS THAN is returned */ 
-		columncounter--;
 		ungetc(lexeme[i], tape);
 		lexeme[i] = 0;
 		return '<';
 	}
 	/* If none of the checks are true, the character read is returned to the tape and 0 is returned */
-	columncounter--;
 	ungetc(lexeme[i], tape);
 	return lexeme[i] = 0;
 }
@@ -565,6 +550,5 @@ int gettoken(FILE *source)
 	
 	token = lexeme[0] = getc (source);
 	columncounter++;
-
 	return token;
 }
