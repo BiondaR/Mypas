@@ -178,27 +178,50 @@ void divl(int type)
     }
 }
 
-void cmp(int type)
-{
+void cmp (int relop, int type, char *aux, char *acc) {
+    char *suffix, *instr;
     switch(type) {
-    case BOOL:
-	printf("\tcmpb auxb\n");
-    	break;
-    case INT32:
-	printf("\tcmpl auxl\n");
-    	break;
-    case INT64:
-	printf("\tcmpq auxq\n");
-    	break;
-    case FLT32:
-	printf("\tcmpf auxf\n");
-    	break;
-    case FLT64:
-	printf("\tcmpdf auxdf\n");
-    	break;
-    default:
-    	;
+        case BOOL:
+            suffix = "b";
+            break;
+        case INT32:
+            suffix = "l";
+            break;
+        case INT64:
+            suffix = "q";
+            break;
+        case FLT32:
+            suffix = "f";
+            break;
+        case FLT64:
+            suffix = "df";
+            break;
+        default:
+            ;
     }
+    switch(relop) {
+        case '>':
+            instr = "gt";
+            break;
+        case '<':
+            instr = "lt";
+            break;
+        case '=':
+            instr = "eq";
+            break;
+        case NEQ:
+            instr = "neq";
+            break;
+        case LEQ:
+            instr = "leq";
+            break;
+        case GEQ:
+            instr = "geq";
+            break;
+        default:
+            ;     
+    }  
+    printf("\t%s%s %s%s, %s%s\n", instr, suffix, aux, suffix, acc, suffix);
 }
 
 void gofalse(int loopnumber)
