@@ -21,6 +21,7 @@
  * Atualizações:
  * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21
  *	*02/03/2021: Adição de comentários;
+ *  *14/03/2021: Adição da verificação de symtab overflow;
  *
  */
 
@@ -68,7 +69,7 @@ int symtab_lookup(const char *symbol)
  * Adding Symbol information in symbol table
  *****************************************************************************/
 int symtab_append(const char *symbol, int lexical_level, int objtype, int transp_type) {
-    
+    /* Check if there is some space in symtab to insert a new variable */
     if(symtab_next_entry < MAXSTBSIZE){
         if ( symtab_lookup(symbol) < 0 || symtab[symtab_entry].lexical_level <= lexical_level) {
         strcpy(symtab[symtab_next_entry].symbol, symbol);
@@ -86,7 +87,7 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
     }
 
     else {
-        printf("Symtab overflow");
+        printf("Symtab overflow: no enough space in symtab to insert a new variable");
     }
    
 }
