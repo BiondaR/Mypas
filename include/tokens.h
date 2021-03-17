@@ -21,6 +21,9 @@
   *
   */
 
+#pragma once
+/* "Prevenção" contra includes e declarações repetidas" */
+
 /* Definição de constantes de tokens */
 enum {
 	ID = 1024,
