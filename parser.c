@@ -661,6 +661,7 @@ char* tokenType(int expected) {
 }  
 
 /* The match function is responsible for comparing the lookahead with the token expected by an expression/term/factor */
+/* The error messages shows the expected token, the line and the column where the error occurred*/
 void match(int expected)
 {	
 	if (lookahead != expected) {
@@ -670,11 +671,11 @@ void match(int expected)
 		token_expected = tokenType(expected);
 		token_lookahead = tokenType(lookahead);
 		if(token_lookahead == "CHAR") {
-			fprintf(stderr,"%d %d: token mismatch: expected %s whereas found %c\n",
-		linecounter, columncounter, token_expected, lookahead);
+			fprintf(stderr,"Ln %d, Col %d: token mismatch: expected %s whereas found %c\n",
+		linecounter, (columncounter - 1), token_expected, lookahead);
 		} else {
-			fprintf(stderr,"%d %d: token mismatch: expected %s whereas found %s\n",
-		linecounter, columncounter, token_expected, token_lookahead);
+			fprintf(stderr,"Ln %d, Col %d: token mismatch: expected %s whereas found %s\n",
+		linecounter, (columncounter - strlen(lexeme)), token_expected, token_lookahead);
 		}
 	}
 	
