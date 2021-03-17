@@ -56,19 +56,19 @@ void move(int type, const char *src, const char *dest)
 {
     switch(type) {
     case BOOL:
-        printf("\tmovb %s, %s\n", src, dest);
+        printf("\tmovb %sb, %sb\n", src, dest);
     	break;
     case INT32:
-        printf("\tmovl %s, %s\n", src, dest);
+        printf("\tmovl %sl, %sl\n", src, dest);
     	break;
     case INT64:
-        printf("\tmovq %s, %s\n", src, dest);
+        printf("\tmovq %sq, %sq\n", src, dest);
     	break;
     case FLT32:
-        printf("\tmovf %s, %s\n", src, dest);
+        printf("\tmovf %sf, %sf\n", src, dest);
     	break;
     case FLT64:
-        printf("\tmovdf %s, %s\n", src, dest);
+        printf("\tmovdf %sdf, %sdf\n", src, dest);
     	break;
     default:
     	;
