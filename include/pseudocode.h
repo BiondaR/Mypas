@@ -40,6 +40,7 @@ void add(int type);
 void sub(int type);
 void mul(int type);
 void divl(int type);
+void cmp (int relop, int type, char *aux, char *acc);
 void gofalse(int);
 void mklabel(int loopnumber);
 void golabel(int loopnumber);
