@@ -254,7 +254,6 @@ void rtrn(void)
 {
     match(RETURN); 
     expr(VOID);
-    match(';');
 }
 
 /*****************************************************************************
@@ -367,7 +366,10 @@ int expr(int expr_type)
         
         /**/right_type = /**/smpexpr(left_type);
         /**/left_type = iscompat(left_type, right_type);/**/
-        /**/if (left_type > 0) return expr_type;/**/
+        /**/if (left_type > 0) {
+            cmp(relop, right_type, "aux", "acc");
+            return expr_type;
+            }/**/
     } else {
         /**/expr_type = iscompat(expr_type, left_type);/**/
     }
@@ -451,13 +453,12 @@ int term(int term_type)
  *       | n
  *       | v [ = expr ]
  */
-void getnumtype(int fact_type, int type); //IMPLEMENTAR
 
 
 int fact(int fact_type) 
 {
     /**/char name[MAXIDLEN+1];/**/ 
-    /***/int expr_type;/***/
+    /***/int expr_type, numtype;/***/
     
     switch (lookahead) {
         case '(':
@@ -471,12 +472,14 @@ int fact(int fact_type)
             match(BOOL);
             break;
         case UINT:
+            numtype = getnumtype(lexeme, UINT);
             /***/fact_type = iscompat(fact_type, INT32);/***/
             /**/move(fact_type, lexeme, "acc");/**/
             
             match(UINT);
             break;
         case FLOAT:
+            numtype = getnumtype(lexeme, FLOAT);
             /***/fact_type = iscompat(fact_type, FLT32);/***/
             /**/move(fact_type, lexeme, "acc");/**/            
             match(FLOAT);
@@ -536,6 +539,28 @@ int fact(int fact_type)
     return fact_type;
 }
 
+int getnumtype(const char * lexeme, int type){
+    
+    switch(type){
+        case UINT:
+            if((strtold(lexeme,NULL)) <= INT_MAX && (strtold(lexeme,NULL)) >= INT_MIN){
+                return INT32;
+            }
+            else{
+                return INT64;
+            }
+            break;
+
+        default:
+            if((strtold(lexeme,NULL)) <= FLT_MAX && (strtold(lexeme,NULL)) >= FLT_MIN){
+                return FLT32;
+            }
+            else{
+                return FLT64;
+            }
+            break;
+    }
+}
 
 
 /* This function is used to replace the token value by its correspondant string.*/
@@ -675,7 +700,7 @@ void match(int expected)
 			fprintf(stderr,"Ln %d, Col %d: token mismatch: expected %s whereas found %c\n",
 		linecounter, (columncounter - 1), token_expected, lookahead);
 		} else {
-			fprintf(stderr,"Ln %d, Col %d: token mismatch: expected %s whereas found %s\n",
+			fprintf(stderr,"Ln %d, Col %ld: token mismatch: expected %s whereas found %s\n",
 		linecounter, (columncounter - strlen(lexeme)), token_expected, token_lookahead);
 		}
 	}
