@@ -79,7 +79,7 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
     /* Check if there is some space in symtab to insert a new variable */
     if (symtab_next_entry < MAXSTBSIZE)
     {
-        /* Check if the symbol already exists in the symtab or have the same lexical level in the local aplication */
+        /* Check if the symbol doesn't exists in the symtab or have the same (or less) lexical level in the local aplication */  // precisa melhorar
         if (symtab_lookup(symbol) < 0 || symtab[symtab_entry].lexical_level <= lexical_level)
         {
             /* Adds symbol name in the symtab */
@@ -97,7 +97,7 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
         }
         else
         {
-            /* There already have the symbol name in that lexical level */
+            /* There already have the symbol name in that lexical level */ // precisa alterar
             fprintf(stderr, "symtab_append: %s multiply defined in current lexical level %d\n", symbol, lexical_level);
             semantic_error++;
             return -2;
@@ -117,7 +117,7 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
 void symtab_update_type(int start, int type)
 {
     int i;
-    
+
     for (i = start; i < symtab_next_entry; i++)
     {
         symtab[i].type = type;
