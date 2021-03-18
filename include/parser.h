@@ -30,6 +30,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
+#include <float.h>
 
 /* Includes do projeto */
 #include <tokens.h>
@@ -56,6 +58,8 @@ int expr(int);
 int smpexpr(int);
 int term(int);
 int fact(int);
+int getnumtype(const char *, int type);
+char* tokenType(int expected);
 
 void match(int expected);
 int gettoken(FILE *);
