@@ -24,18 +24,18 @@
   */
 
 #pragma once
-/* "Prevenção" contra includes e declarações repetidas" */
+/* Prevention of repeateds includes and declarations */
 
-/* Includes do sistema */
+/* System Includes */
 #include <string.h>
 #include <stdio.h>
 
-/* Includes do projeto */
+/* Project Includes */
 #include <constants.h>
 
-/* Definição da tabela de símbolos, que possui o símbolo 
- * e seu tipo correspondente.
- *
+/* 
+ * Definition of symbol table, that has the symbol and its corresponding informations
+ * like your type, position on the symtab, lexical level, etc.
  */
 typedef struct __symtab__ {
     char symbol[MAXIDLEN+1];
@@ -48,12 +48,12 @@ typedef struct __symtab__ {
 }
 SYMTAB;
 
-/* Definição do cabeçalho de funções. */
+/* Definition of functions headers. */
 int symtab_lookup ( const char*);
 int symtab_append(const char *symbol, int lexical_level, int objtype, int transp_type);
 void symtab_update_type(int, int);
 
-/* Definição de variáveis externas. */
+/* Definition of extern variables. */
 extern SYMTAB symtab[MAXSTBSIZE];
 extern int symtab_next_entry;
 extern int semantic_error;
