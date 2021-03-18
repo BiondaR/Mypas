@@ -15,7 +15,7 @@
  * Nikolas Gomes de Sá
  * 
  */
-  
+
 /*
  * Data de criação: 21/02/2021
  * Atualizações:
@@ -56,9 +56,15 @@ int symtab_entry;
  ****************************************************************************/
 int symtab_lookup(const char *symbol)
 {
-    for (symtab_entry = symtab_next_entry - 1; symtab_entry > -1; symtab_entry--) {
-        if (strcmp(symtab[symtab_entry].symbol, symbol) == 0) return symtab_entry;
+    /* Go through the symtable */
+    for (symtab_entry = symtab_next_entry - 1; symtab_entry > -1; symtab_entry--)
+    {
+        /* checks if the symbol exists in the symtab */
+        if (strcmp(symtab[symtab_entry].symbol, symbol) == 0)
+        /* return the position of the symbol in the symtab */
+            return symtab_entry;
     }
+    /* if doesn't have the symbol on the symtab, or the symtab is empty, return symtab_entry = -1 */
     return symtab_entry = -1;
 }
 
@@ -68,48 +74,72 @@ int symtab_lookup(const char *symbol)
  * lexical_level => when enter in a function or a procedure increases the lexical level
  * Adding Symbol information in symbol table
  *****************************************************************************/
-int symtab_append(const char *symbol, int lexical_level, int objtype, int transp_type) {
+int symtab_append(const char *symbol, int lexical_level, int objtype, int transp_type)
+{
     /* Check if there is some space in symtab to insert a new variable */
-    if(symtab_next_entry < MAXSTBSIZE){
-        if ( symtab_lookup(symbol) < 0 || symtab[symtab_entry].lexical_level <= lexical_level) {
-        strcpy(symtab[symtab_next_entry].symbol, symbol);
-        sprintf(symtab[symtab_next_entry].offset, " %s[%d]", symbol, lexical_level); //é so um debug, pode ser melhorado
-        symtab[symtab_next_entry].lexical_level = lexical_level;
-        symtab[symtab_next_entry].objtype = objtype;
-        symtab[symtab_next_entry].transp_type = transp_type;
-        return symtab_next_entry++;
-        } else {
-	    /* essa parte pode ser modularizada (aula  17/2 min 11) */
-        fprintf(stderr, "symtab_append: %s multiply defined in current lexical level %d\n", symbol, lexical_level);
-        semantic_error++;
-        return -2;
+    if (symtab_next_entry < MAXSTBSIZE)
+    {
+        /* Check if the symbol already exists in the symtab or have the same lexical level in the local aplication */
+        if (symtab_lookup(symbol) < 0 || symtab[symtab_entry].lexical_level <= lexical_level)
+        {
+            /* Adds symbol name in the symtab */
+            strcpy(symtab[symtab_next_entry].symbol, symbol);
+            /* This sprintf shows the symbols name and lexical level in the pseudocode*/
+            sprintf(symtab[symtab_next_entry].offset, " %s[%d]", symbol, lexical_level);
+            /* Adds symbols lexical level in the symtab */
+            symtab[symtab_next_entry].lexical_level = lexical_level;
+            /* Adds symbols object type in the symtab */
+            symtab[symtab_next_entry].objtype = objtype;
+            /* Adds symbols transp_type in the symtab */
+            symtab[symtab_next_entry].transp_type = transp_type;
+            /* Return the next position to insert a new symbol*/
+            return symtab_next_entry++;
+        }
+        else
+        {
+            /* There already have the symbol name in that lexical level */
+            fprintf(stderr, "symtab_append: %s multiply defined in current lexical level %d\n", symbol, lexical_level);
+            semantic_error++;
+            return -2;
         }
     }
 
-    else {
+    /* There is no space in the symtab to adds a new symbol */
+    else
+    {
         printf("Symtab overflow: no enough space in symtab to insert a new variable");
     }
-   
 }
 
 /*****************************************************************************
  * Types promotion in symbol table
  ****************************************************************************/
-void symtab_update_type(int start, int type) {
+void symtab_update_type(int start, int type)
+{
     int i;
-    for (i = start; i < symtab_next_entry; i++) {
+    
+    for (i = start; i < symtab_next_entry; i++)
+    {
         symtab[i].type = type;
-        switch(type) {
-            case BOOL:
-                symtab[i].data_size = 1; break;
-            case INT32:
-            case FLT32:
-                symtab[i].data_size = 4; break;
-            case INT64:
-            case FLT64:
-                symtab[i].data_size = 8; break;
-            default:
-                symtab[i].data_size = 0;
+        switch (type)
+        {
+        case BOOL:
+        /* Case type is BOOL promote data_size of the symbol to 1 */
+            symtab[i].data_size = 1;
+            break;
+        case INT32:
+        case FLT32:
+        /* Case type is INT32 or FLT32 promote data_size of the symbol to 4 */
+            symtab[i].data_size = 4;
+            break;
+        case INT64:
+        case FLT64:
+        /* Case type is INT64 or FLT64 promote data_size of the symbol to 8 */
+            symtab[i].data_size = 8;
+            break;
+        default:
+        /* If type is none of this. Data_size of the symbol is 0 */
+            symtab[i].data_size = 0;
         }
     }
 }
