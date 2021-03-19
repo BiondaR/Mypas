@@ -22,6 +22,7 @@
  * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21
  *	*02/03/2021: Adição de comentários;
  *  *14/03/2021: Adição da verificação de symtab overflow;
+ *  *18/03/2021: Adição de comentários;
  *
  */
 
