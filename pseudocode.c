@@ -18,6 +18,9 @@
   
  /*
   * Data de criação: 21/02/2021
+  * 
+  *     *17/03/2021: Adição da função cmp;
+  *     *17/03/2021: Melhoeria na função move;
   *
   */
 
