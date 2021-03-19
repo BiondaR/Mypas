@@ -20,8 +20,11 @@
   * Data de criação: 21/02/2021
   * Atualizações:
   * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21;
-  *	*02/03/2021: Adição da função tokentype e modificação da função match;
-  *	*16/03/2021: melhoria na mensagem de erro da função match;
+  *	    *02/03/2021: Adição da função tokentype e modificação da função match;
+  *	    *16/03/2021: Melhoria na mensagem de erro da função match;
+  *     *17/03/2021: Implementação da função getnumtype;
+  *     *17/03/2021: Adição da função cmp;
+  *     *19/03/2021: Adição de comentários no iscompat, mypas, vardecl, varlist e typemod;
   *
   */
 
@@ -55,31 +58,47 @@ enum {
 	FLT64,
 };
 ***/
-
+/**************************************************************************************** 
+ * This is a implementation of inherited attributes. This function check, 
+ * using as a base the type table above, the compatibility 
+ * between the left (acc_type) and right (syn_type) type 
+****************************************************************************************/
 int iscompat(int acc_type, int syn_type)
 {
+    /* In that switch every acc_type with syn_type without '+', '-', '*', '/' */
     switch (acc_type) {
         case VOID:
             return syn_type;
+
+        /* if in this case doesn't return BOOL the types are incompatible*/
         case BOOL:
             if (syn_type == AND || syn_type == OR || syn_type == NOT || syn_type == BOOL) return BOOL;
             break;
+
+        /* if in this case doesn't return syn_type the types are incompatible*/
         case INT32:
             if (syn_type >= INT32 && syn_type <= FLT64) return syn_type;
             break;
+
+        /* if in this case doesn't return syn_type or return FLT32 the types are incompatible*/
         case FLT32:
             if (syn_type > FLT32 && syn_type <= FLT64) return syn_type;
             if (syn_type == INT32) return FLT32;
             break;
+
+        /* if in this case doesn't return FLT64 the types are incompatible*/
         case FLT64:
             if (syn_type >= INT32 && syn_type <= FLT64) return FLT64;
     }
+    /* In that ocasion we are checking INT32, INT64, FLT32 and FLT64 with '+', '-', '*', '/' */
     if (acc_type >= INT32 && acc_type <= FLT64) {
+        /* if in these cases don't return acc_type the types are incompatible*/
         switch(syn_type) {
             case'+':case'-':case'*':case'/':case DIV:case MOD:
                 return acc_type;
         }
     }
+    /* return INCOMPTBL where the types encounter in the type table is dashed */
     return INCOMPTBL;
 }
 
@@ -96,6 +115,7 @@ void mypas(void)
     match(PROGRAM);
     match(ID);
     match(';'); 
+    /* lexical_level of fuctions, procedure and global variables */
     /**/lexical_level++;/**/
     declarative();
     imperative(); 
@@ -117,17 +137,25 @@ void declarative(void)
  *****************************************************************************/
 void vardecl(void)
 {
+    
     if (lookahead == VAR ) {
         match (VAR);
         /**/int first_pos;/**/
+        /* Local variable declaration, because objtype = 1 => variable;
+        transp_type = 1 => local storage;*/
         /**/objtype = transp_type = 1;/**/
         _varlist_head:
         /**/first_pos = symtab_next_entry;/**/
         varlist();
         match(':');
+        /* Declare var type: integer, real, double or boolean as INT32, FLT32, FLT64 or BOOL */
         /**/int type = /**/ typemod();
+        /* Add var type in symtab as Data_size: 
+        INT32 or FLT32 => Data_size = 4, FLT64 => Data_size = 8, BOOL => Data_size = 2 */
         /**/symtab_update_type(first_pos, type);/**/
         match(';');
+        /* If lookahead is another var name (ID is var name in this case) goto _varlist_head to 
+        repeat the previus steps */
         if (lookahead == ID) { goto _varlist_head; }
     } else {
         ;
@@ -141,8 +169,10 @@ void vardecl(void)
 void varlist(void)
 {
     _match_id_head:
+    /* Analyzes and, if it's possible, add to the symbol table */
     /**/symtab_append(lexeme, lexical_level, objtype, transp_type);/**/
     match(ID);
+    /* If more than one variable is defined goto _match_id_head and add to symtab */
     if (lookahead == ',') { match(','); goto _match_id_head; }
 }
 
@@ -152,6 +182,7 @@ void varlist(void)
 int typemod(void)
 {
     /**/int type;/**/
+    /* Declare types of var or functions: integer, real, double or boolean as INT32, FLT32, FLT64 or BOOL */
     switch (lookahead) {
         case INTEGER:
             /**/type = INT32;/**/
