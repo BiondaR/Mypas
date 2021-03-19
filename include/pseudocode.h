@@ -19,6 +19,8 @@
  /*
   * Data de criação: 21/02/2021
   * 
+  *   *17/03/2021: Adição de cmp;
+  * 
   */
 
 #pragma once
