@@ -6,13 +6,13 @@ program Teste;
 	    x, y: real;
 	    t, w: double;
 
-	function fact(n: integer): integer;
+	function fact(n: integer): double;
 		{ declarative scope} 
-		var m: integer;
+		var m: double;
 		
 		{ imperative scope }
 		begin
-			if n < 2 then
+			if n > 2 then
 				m := n * fact(n - 1)
 			else
 				m := n;
@@ -25,6 +25,7 @@ program Teste;
 
 	begin
 
+		{t := w * kajdajd (j);}
 		t := w * fact (j)
 	end.
 
