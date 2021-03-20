@@ -10,7 +10,6 @@
 /* 
  * Desenvolvido pelo grupo 3:
  * Bionda Rozin
- * Matheus Missio Francisco
  * Nicholas Seiti Handa
  * Nikolas Gomes de Sá
  * 
@@ -20,7 +19,7 @@
   * Data de criação: 21/02/2021
   *  Alterações:
   *   *17/03/2021: Adição de cmp;
-  *   *19/03/2021: Adição da função ret;
+  *   *19/03/2021: Adição da função ret, callfunc, mkfunclabel;
   *   *20/03/2021: Adição de begin, preambuledecl, preambuleend, undeclared e endcode;
   */
 #pragma once
@@ -44,11 +43,9 @@ void mul(int type);
 void divl(int type);
 void cmp (int relop, int type, char *aux, char *acc);
 void ret(int type);
-void undeclared (int line, int col, char *name);
-void callfunc(int funcnumber);
-void mkfunclabel(int funcnumber);
-void callproc(int procnumber);
-void mkproclabel(int procnumber);
+void undeclared (int line, long int col, char *name);
+void callfunc(char *funcname);
+void mkfunclabel(char *funcname);
 void gofalse(int);
 void mklabel(int loopnumber);
 void golabel(int loopnumber);
