@@ -18,9 +18,11 @@
   
  /*
   * Data de criação: 21/02/2021
-  * 
-  *     *17/03/2021: Adição da função cmp;
+  *  Alterações:
+  *     *16/03/2021: Correção do cmp;
   *     *17/03/2021: Melhoeria na função move;
+  *     *19/03/2021: Adição da função ret, callfunc, mkfunclabel, callproc, mkproclabel;
+  *     *20/03/2021: Adição de begin, preambuledecl, preambuleend, undeclared, begin e endcode;
   *
   */
 
@@ -62,7 +64,7 @@ void move(int type, const char *src, const char *dest)
         printf("\tmovb %sb, %sb\n", src, dest);
     	break;
     case INT32:
-        printf("\tmovl %sl, %sl\n", src, dest);
+        printf("\tmovl %sl, %sl\n", src, dest); 
     	break;
     case INT64:
         printf("\tmovq %sq, %sq\n", src, dest);
@@ -182,7 +184,7 @@ void divl(int type)
 }
 
 void cmp (int relop, int type, char *aux, char *acc) {
-    char *suffix, *instr;
+    char *suffix = "", *instr = "";
     switch(type) {
         case BOOL:
             suffix = "b";
@@ -224,7 +226,49 @@ void cmp (int relop, int type, char *aux, char *acc) {
         default:
             ;     
     }  
-    printf("\t%s%s %s%s, %s%s\n", instr, suffix, aux, suffix, acc, suffix);
+    if ( suffix != "" && instr != "" ){
+        printf("\t%s%s %s%s, %s%s\n", instr, suffix, aux, suffix, acc, suffix);
+    }
+    
+}
+
+void ret(int type) {
+    switch(type) {
+    case INT32:
+	    printf("\treturnl accl\n");
+    	break;
+    case INT64:
+	    printf("\treturnq accq\n");
+    	break;
+    case FLT32:
+	    printf("\treturnf accf\n");
+    	break;
+    case FLT64:
+	    printf("\treturndf accdf\n");
+    	break;
+    default:
+    	;
+    }
+}
+
+void undeclared (int line, int col, char *name) {
+    printf("Ln %d, Col %d: %s undeclared\n", line, col, name);
+}
+
+void callfunc(int funcnumber){
+    printf("\tcall FUNC%d\n", funcnumber);
+}
+
+void mkfunclabel(int funcnumber){
+    printf("FUNC%d:\n", funcnumber);
+}
+
+void callproc(int procnumber){
+    printf("\tcall PROC%d\n", procnumber);
+}
+
+void mkproclabel(int procnumber){
+    printf("PROC%d:\n", procnumber);
 }
 
 void gofalse(int loopnumber)
@@ -239,4 +283,63 @@ void mklabel(int loopnumber) {
 void golabel(int loopnumber)
 {
     printf("\tgoto .L%d\n", loopnumber);
+}
+
+void begin(void){
+    printf("\tThis is a simplified pascal compiler");
+    printf("\n\tDeveloped by:");
+    printf("\n\t\tBionda Rozin");
+    printf("\n\t\tMatheus Missio Francisco");
+    printf("\n\t\tNicholas Seiti Handa");
+    printf("\n\t\tNikolas Gomes de Sá");
+    printf("\n\tIts use is restrict for academic proposes, only");
+    printf("\n\t23/03/2021\n");
+}
+
+void preambuledecl(int lexlevel) {
+    printf("\n.decl:\n");
+    printf("\tlex_level %d\n", lexlevel);
+}
+
+void preambule(int type, int symtab_entry, int sym_ntx_entry){
+    int flag = 1;
+
+    for(int i = symtab_entry; i < sym_ntx_entry; i++){
+        switch(type){
+            case BOOL:
+    	        printf("\t.b");
+    	        break;
+        case INT32:
+    	        printf("\t.l");
+    	        break;
+        case INT64:
+    	        printf("\t.q");
+    	        break;
+        case FLT32:
+    	        printf("\t.f");
+    	        break;
+        case FLT64:
+    	        printf("\t.df");
+    	        break;
+        default:
+    	       flag = 0;
+    }
+
+        if (flag == 1){
+            printf("\t%s\n", symtab[i].symbol);
+        }
+        else{
+            flag = 1;
+        }
+    }
+}
+
+void preambuleend(void){
+    printf(".end_decl\n\n");
+    printf(".code:\n\n");
+}
+
+void endcode(int semantic_errors){
+    printf("\n.end_code\n");
+    printf("\tThere was %d semantic errors in this code\n\n", semantic_errors);
 }
