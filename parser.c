@@ -10,7 +10,6 @@
  /* 
  * Desenvolvido pelo grupo 3:
  * Bionda Rozin
- * Matheus Missio Francisco
  * Nicholas Seiti Handa
  * Nikolas Gomes de Sá
  * 
@@ -26,6 +25,7 @@
   *     *17/03/2021: Correção da chamada da função cmp;
   *     *19/03/2021: Adição de comentários no iscompat, mypas, vardecl, varlist e typemod;
   *     *20/03/2021: Adição de modularizações e comentários;
+  *     *20/03/2021: Correção de erros na criação de labels de função, correção de erros na chamada de return, adição de um move em expr;
   *
   */
 
@@ -108,9 +108,7 @@ void mypas(void)
     match(';'); 
     /* lexical_level of fuctions, procedure and global variables */
     /**/lexical_level++;/**/
-    //printf("\n /**/ declarative call /**/");
     declarative();
-    //printf("\n /**/ imperative call /**/");
     imperative(); 
     /**/lexical_level--;/**/
     match ('.');
@@ -122,9 +120,7 @@ void mypas(void)
  *****************************************************************************/
 void declarative(void) 
 { 
-    //printf("\n /**/ vardecl call /**/");
     vardecl();
-    //printf("\n /**/ sbpdecl call /**/");
     sbpdecl(); 
 }
 
@@ -143,10 +139,8 @@ void vardecl(void)
         preambuledecl(lexical_level);
         _varlist_head:
         /**/first_pos = symtab_next_entry;/**/
-        //printf("\n /**/ varlist call /**/");
         varlist();
         match(':');
-        //printf("\n /**/ typemod call /**/");
         /* Declare var type: integer, real, double or boolean as INT32, FLT32, FLT64 or BOOL */
         /**/int type = /**/ typemod();
         /* Add var type in symtab as Data_size: 
@@ -210,8 +204,6 @@ int typemod(void)
 /*****************************************************************************
  * sbpdecl -> { PROCEDURE ID formparm ; declarative imperative ; | FUNCTION ID formparm : typemod ; declarative imperative ; }
  *****************************************************************************/
-/**/int func_count = 1;/**/
-/**/int proc_count = 1;/**/
 void sbpdecl(void)
 {
     /**/int isfunc = 0;/**/
@@ -228,28 +220,20 @@ void sbpdecl(void)
             /**/strcpy(sbpname, lexeme);/**/
             /**/int sbppos = symtab_append(sbpname, lexical_level, objtype, transp_type);/**/
             match(ID);
-            /* label procedure */
-            //mkproclabel(1);
             /**/symtab_sentinel = symtab_next_entry;/**/
             /**/lexical_level++;/**/
-            //printf("\n /**/ formparm call /**/");
             formparm();
             if (isfunc) {
-                /*aqui entra o label de função*/
                 isfunc = 0;
                 match(':'); 
-                //printf("\n /**/ typemod call /**/");
-                mkfunclabel(1);
                 /**/int rettype = /**/typemod();
                 /**/symtab[sbppos].type = rettype;/**/
             } else {
-                mkproclabel(proc_counter = proc_count++);
                 /**/symtab[sbppos].type = VOID;/**/
             }
             match(';');
-            //printf("\n /**/ declarative call /**/");
+            mkfunclabel(sbpname);
             declarative();
-            //printf("\n /**/ imperative call /**/");
             imperative();
             /**/lexical_level--;/**/
             /**/symtab_next_entry = symtab_sentinel;/**/
@@ -277,10 +261,8 @@ void formparm(void)
         } else {
             /**/transp_type = 2;/**/
         }
-        //printf("\n /**/ varlist call /**/");
         varlist();
         match(':');
-        //printf("\n /**/ typemod call /**/");
         /**/int type = /**/typemod();
         /**/symtab_update_type(first_pos, type);/**/
         if (lookahead == ';') { match(';'); goto parm_list; }
@@ -297,7 +279,6 @@ void imperative(void)
 {
     match(BEGIN);
     stmt_list:
-    //printf("\n /**/ stmt call /**/");
     stmt();
     if (lookahead == ';') { match(';'); goto stmt_list; }
     match(END);
@@ -306,9 +287,8 @@ void imperative(void)
 void rtrn(void)
 {
     match(RETURN);
-    /* como passar o tipo?*/
-    ret(INT32); 
-    expr(VOID);
+    int exp_type = expr(VOID);
+    ret(exp_type); 
 }
 
 /*****************************************************************************
@@ -319,26 +299,20 @@ void stmt(void)
     /**/int fact_type;/**/
     switch (lookahead) {
         case BEGIN:
-            //printf("\n /**/ imperative call /**/");
             imperative(); break;
         case IF:
-            //printf("\n /**/ ifstmt call /**/");
             ifstmt(); break;
         case WHILE:
-            //printf("\n /**/ whlstmt call /**/");
             whlstmt(); break;
         case REPEAT:
-            //printf("\n /**/ rptstmt call /**/");
             rptstmt(); break;
         case RETURN:
-            //printf("\n /**/ rtrn call /**/");
             rtrn(); break;
         case '(':
         case ID:
         case BOOL:
         case UINT:
         case FLOAT:
-            //printf("\n /**/ fact call /**/");
             /**/fact_type = /**/fact(VOID); break;
         default:
             ;
@@ -353,7 +327,6 @@ void ifstmt(void)
 {
     /**/int expr_type, else_count, endif_count;/**/
     match(IF); 
-    //printf("\n /**/ expr call /**/");
     /**/expr_type = /**/expr(BOOL); 
     match(THEN);
     /**/gofalse(else_count = endif_count = loop_count++);/**/
@@ -364,7 +337,6 @@ void ifstmt(void)
         golabel(endif_count = loop_count++); 
         mklabel(else_count);
         /**/
-        //printf("\n /**/ stmt call /**/");
         stmt();
     }
     /**/mklabel(endif_count);/**/
@@ -378,11 +350,9 @@ void whlstmt(void)
     /**/int expr_type, whlhead, whltail;/**/
     match(WHILE);
     /**/mklabel(whlhead = loop_count++);/**/
-    //printf("\n /**/ expr call /**/");
     /**/expr_type = /**/expr(BOOL);
     match(DO);
     /**/gofalse(whltail = loop_count++);/**/
-    //printf("\n /**/ stmt call /**/");
     stmt();
     /**/golabel(whlhead);/**/
     /**/mklabel(whltail);/**/
@@ -396,11 +366,9 @@ void rptstmt(void)
     /**/int expr_type; int replbl;/**/
     /**/mklabel(replbl = loop_count++);/**/
     stmt_head:
-    //printf("\n /**/ stmt call /**/");
     stmt();
     if (lookahead == ';') { match(';'); goto stmt_head; }
     match(UNTIL);
-    //printf("\n /**/ expr call /**/");
     /**/expr_type = /**/expr(BOOL);
     /**/gofalse(replbl);/**/
 }
@@ -423,15 +391,13 @@ int isrelop(void)
 int expr(int expr_type)
 {
     /**/int relop; int left_type, right_type;/**/
-    //printf("\n /**/ smpexpr call /**/");
     /**/left_type = /**/smpexpr(VOID);
-    //printf("\n /**/ isrelop call /**/");
     if (isrelop()) {
+        move(left_type, "acc", "aux");
         /**/relop = lookahead;/**/
         /**/if (expr_type != BOOL) expr_type = INCOMPTBL;/**/
         
         match(lookahead);
-        //printf("\n /**/ smpexpr call /**/");
         /**/right_type = /**/smpexpr(left_type);
         /**/left_type = iscompat(left_type, right_type);/**/
         /**/if (left_type > 0) {
@@ -454,8 +420,8 @@ int smpexpr(int smpexpr_type)
         
         match(lookahead);
     }
-    //printf("\n /**/ term call /**/");
     /***/int term_type = /***/ term(smpexpr_type);/**/smpexpr_type = iscompat(smpexpr_type, term_type);/**/
+
     /**/if (signal == '-' || signal == NOT) negate(smpexpr_type);/**/
     /***/smpexpr_type = iscompat(smpexpr_type, term_type);/***/
     
@@ -464,7 +430,6 @@ int smpexpr(int smpexpr_type)
         /***/smpexpr_type = iscompat(smpexpr_type, oplus);/***/
         /**/push(smpexpr_type);/**/
         
-        //printf("\n /**/ term call /**/");
         match (lookahead); /***/term_type = /***/ term(smpexpr_type);
         
         /***/smpexpr_type = iscompat(smpexpr_type, term_type);/***/
@@ -484,26 +449,23 @@ int smpexpr(int smpexpr_type)
     
     /***/return smpexpr_type;/***/
 }
-
+/**/long int columns;/**/
 /* term -> fact { (*) fact } */
 int term(int term_type)
 { 
-    //printf("\n /**/ fact call /**/");
     /***/int fact_type = /***/fact(term_type); /**/term_type = iscompat(term_type, fact_type);/**/
     
     while ( lookahead == '*' || lookahead == '/' || lookahead == DIV | lookahead == MOD | lookahead == AND ) {
         /**/int otimes = lookahead;/**/
         /***/term_type = iscompat(term_type, otimes);/***/
         /**/push(term_type);/**/
-        
+       
         match (lookahead); 
-        //printf("\n /**/ fact call /**/");
+        columns = columncounter;
         /***/fact_type = /***/fact(term_type);
         
         /***/term_type = iscompat(term_type, fact_type);/***/
-        
         /**/move(term_type, "acc", "aux");/**/
-        
         /**/
         switch(otimes) {
             case '*':
@@ -529,11 +491,8 @@ int fact(int fact_type)
 {
     /**/char name[MAXIDLEN+1];/**/ 
     /***/int expr_type, numtype;/***/
-    /**/int columns;/**/
-    
     switch (lookahead) {
         case '(':
-            //printf("\n /**/ expr call /**/");
             match('('); /***/expr_type = /***/expr(fact_type); match(')');
             /***/fact_type = iscompat(fact_type, expr_type);/***/
             break;
@@ -557,14 +516,11 @@ int fact(int fact_type)
             match(FLOAT);
             break;
         default:
-            /**/strcpy(name, lexeme);/**/
-            
-            columns = columncounter;
+            /**/strcpy(name, lexeme);/**/     
             
             match(ID);
             if (lookahead == ASGN) {
                 /**** L-Value ****/
-                //printf("\n /**/ expr call /**/");
                 match(ASGN); /***/expr_type = /***/expr(fact_type);
                 /**/
                 if ( symtab_lookup(name) < 0 ) {
@@ -596,7 +552,7 @@ int fact(int fact_type)
                             move(fact_type, symtab[symtab_entry].offset, "acc");
                             break;
                         case 3:
-                            callfunc(lexical_level); /*verrr*/
+                            callfunc(symtab[symtab_entry].symbol);
                             if (lookahead == '(') {
                                 match('(');
                                 _expr_list:
