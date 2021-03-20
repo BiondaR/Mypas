@@ -16,7 +16,7 @@ program Teste;
 				m := n * fact(n - 1)
 			else
 				m := n;
-			return m;
+			return m
 		end;
 
 	{ end declarative scope }
