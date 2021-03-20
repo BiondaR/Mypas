@@ -10,7 +10,6 @@
 /* 
  * Desenvolvido pelo grupo 3:
  * Bionda Rozin
- * Matheus Missio Francisco
  * Nicholas Seiti Handa
  * Nikolas Gomes de Sá
  * 
@@ -21,7 +20,7 @@
   *  Alterações:
   *     *16/03/2021: Correção do cmp;
   *     *17/03/2021: Melhoeria na função move;
-  *     *19/03/2021: Adição da função ret, callfunc, mkfunclabel, callproc, mkproclabel;
+  *     *19/03/2021: Adição da função ret, callfunc, mkfunclabel;
   *     *20/03/2021: Adição de begin, preambuledecl, preambuleend, undeclared, begin e endcode;
   *
   */
@@ -235,40 +234,32 @@ void cmp (int relop, int type, char *aux, char *acc) {
 void ret(int type) {
     switch(type) {
     case INT32:
-	    printf("\treturnl accl\n");
+	    printf("\treturnl accl\n\n");
     	break;
     case INT64:
-	    printf("\treturnq accq\n");
+	    printf("\treturnq accq\n\n");
     	break;
     case FLT32:
-	    printf("\treturnf accf\n");
+	    printf("\treturnf accf\n\n");
     	break;
     case FLT64:
-	    printf("\treturndf accdf\n");
+	    printf("\treturndf accdf\n\n");
     	break;
     default:
     	;
     }
 }
 
-void undeclared (int line, int col, char *name) {
-    printf("Ln %d, Col %d: %s undeclared\n", line, col, name);
+void undeclared (int line, long int col, char *name) {
+    printf("Ln %d, Col %ld: %s undeclared\n", line, col, name);
 }
 
-void callfunc(int funcnumber){
-    printf("\tcall FUNC%d\n", funcnumber);
+void callfunc(char *funcname){
+    printf("\tcall %s\n", funcname);
 }
 
-void mkfunclabel(int funcnumber){
-    printf("FUNC%d:\n", funcnumber);
-}
-
-void callproc(int procnumber){
-    printf("\tcall PROC%d\n", procnumber);
-}
-
-void mkproclabel(int procnumber){
-    printf("PROC%d:\n", procnumber);
+void mkfunclabel(char *funcname){
+    printf("%s:\n", funcname);
 }
 
 void gofalse(int loopnumber)
@@ -289,7 +280,6 @@ void begin(void){
     printf("\tThis is a simplified pascal compiler");
     printf("\n\tDeveloped by:");
     printf("\n\t\tBionda Rozin");
-    printf("\n\t\tMatheus Missio Francisco");
     printf("\n\t\tNicholas Seiti Handa");
     printf("\n\t\tNikolas Gomes de Sá");
     printf("\n\tIts use is restrict for academic proposes, only");
