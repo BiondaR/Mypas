@@ -23,6 +23,7 @@
  *	*02/03/2021: Adição de comentários;
  *  *14/03/2021: Adição da verificação de symtab overflow;
  *  *18/03/2021: Adição de comentários;
+ *  *20/03/2021: Modificação da representação do símbolo no pseudocode, na função symtab_append;
  *
  */
 
@@ -80,13 +81,13 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
     /* Check if there is some space in symtab to insert a new variable */
     if (symtab_next_entry < MAXSTBSIZE)
     {
-        /* Check if the symbol doesn't exists in the symtab or have the same (or less) lexical level in the local aplication */  // precisa melhorar
+        /* Check if the symbol doesn't exists in the symtab or have the same (or less) lexical level in the local aplication */
         if (symtab_lookup(symbol) < 0 || symtab[symtab_entry].lexical_level <= lexical_level)
         {
             /* Adds symbol name in the symtab */
             strcpy(symtab[symtab_next_entry].symbol, symbol);
-            /* This sprintf shows the symbols name and lexical level in the pseudocode*/
-            sprintf(symtab[symtab_next_entry].offset, " %s[%d]", symbol, lexical_level);
+            /* This sprintf shows the symbol position in the symtab in the pseudocode*/
+            sprintf(symtab[symtab_next_entry].offset, " symtab[%d]", symtab_next_entry);
             /* Adds symbols lexical level in the symtab */
             symtab[symtab_next_entry].lexical_level = lexical_level;
             /* Adds symbols object type in the symtab */
@@ -98,14 +99,14 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
         }
         else
         {
-            /* There already have the symbol name in that lexical level */ // precisa alterar
+            /* There already have the symbol name in that lexical level */
             fprintf(stderr, "symtab_append: %s multiply defined in current lexical level %d\n", symbol, lexical_level);
             semantic_error++;
             return -2;
         }
     }
 
-    /* There is no space in the symtab to adds a new symbol */
+    /* There is no space in the symtab to add a new symbol */
     else
     {
         printf("Symtab overflow: no enough space in symtab to insert a new variable");
