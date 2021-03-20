@@ -10,7 +10,6 @@
 /* 
  * Desenvolvido pelo grupo 3:
  * Bionda Rozin
- * Matheus Missio Francisco
  * Nicholas Seiti Handa
  * Nikolas Gomes de Sá
  * 
@@ -86,8 +85,8 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
         {
             /* Adds symbol name in the symtab */
             strcpy(symtab[symtab_next_entry].symbol, symbol);
-            /* This sprintf shows the symbol position in the symtab in the pseudocode*/
-            sprintf(symtab[symtab_next_entry].offset, " symtab[%d]", symtab_next_entry);
+            /* This sprintf shows the symbol and its position in the symtab in the pseudocode*/
+            sprintf(symtab[symtab_next_entry].offset, " %s symtab[%d]", symbol, symtab_next_entry);
             /* Adds symbols lexical level in the symtab */
             symtab[symtab_next_entry].lexical_level = lexical_level;
             /* Adds symbols object type in the symtab */
