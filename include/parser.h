@@ -10,7 +10,6 @@
 /* 
  * Desenvolvido pelo grupo 3:
  * Bionda Rozin
- * Matheus Missio Francisco
  * Nicholas Seiti Handa
  * Nikolas Gomes de Sá
  * 
