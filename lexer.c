@@ -10,7 +10,6 @@
  /* 
   * Desenvolvido pelo grupo 3:
   * Bionda Rozin
-  * Matheus Missio Francisco
   * Nicholas Seiti Handa
   * Nikolas Gomes de Sá
   * 
@@ -20,9 +19,10 @@
   * Data de criação: 21/02/2021
   *  Atualizações:
   * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21;
-  *	*27/02/2021: Adição de comentários e de um contador de colunas;
-  *	*02/03/2021: Adição de comentários;
-  *	*16/03/2021: Correção de bugs na forma como o columncounter contava colunas;
+  *	    *27/02/2021: Adição de comentários e de um contador de colunas;
+  *	    *02/03/2021: Adição de comentários;
+  *	    *16/03/2021: Correção de bugs na forma como o columncounter contava colunas;
+  *     *20/03/2021: Correção de bugs na forma como o columncounter contava colunas;
   */
 
 #include <lexer.h>
@@ -39,7 +39,7 @@
  */
 
 /* The column counter is incremented for each character read from the tape, in each of the functions present in lexer.c,
- * is decremented for each character returned to the tape and is reseted to 1 for each new line started
+ * is reseted to 1 for each new line started
  */
 int columncounter = 1;
 /* The line counter is incremented when a '\n' character is found */
@@ -48,14 +48,11 @@ int linecounter = 1;
 /* The function below ignores spaces and comments that may be present on the tape */
 void skipunused(FILE *tape)
 {
-    /* If reads some space or comment, then sets flag in 1. It means that columncounter will be decreased later */
-    int flag = -1;
   	int head;
 	
 	_skip_spaces_head:
 	/* This section is responsible for ignoring space characters */
  	while ( isspace( head = getc(tape) ) ) {
-        flag++;
 		if (head == '\n') {
 			columncounter = 1;
 			linecounter++;
@@ -65,7 +62,6 @@ void skipunused(FILE *tape)
 	}
 	/* This section is responsible for ignoring comments, whose structure is: {comment} */
 	if ( head == '{' ) {
-        flag++;
 		while ( (head = getc(tape)) != '}' && head != EOF ){
 			if (head == '\n') {
 				columncounter = 1;
@@ -77,9 +73,6 @@ void skipunused(FILE *tape)
 		/* After the end of the comment, it will be checked if there are more spaces characters and/or new comments on the tape */
 		if (head == '}') { goto _skip_spaces_head; }
 	}
-    if ( flag >= 1 ){
-        columncounter--;
-    }
   	ungetc ( head, tape );
 }
 
