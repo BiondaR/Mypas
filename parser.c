@@ -135,8 +135,8 @@ void vardecl(void)
         /* Local variable declaration, because objtype = 1 => variable;
         transp_type = 1 => local storage;*/
         /**/objtype = transp_type = 1;/**/
-        /* Preambule start */
-        preambuledecl(lexical_level);
+        /* Preamble start */
+        preambledecl(lexical_level);
         _varlist_head:
         /**/first_pos = symtab_next_entry;/**/
         varlist();
@@ -147,7 +147,7 @@ void vardecl(void)
         INT32 or FLT32 => Data_size = 4, FLT64 => Data_size = 8, BOOL => Data_size = 2 */
         /**/symtab_update_type(first_pos, type);/**/
         /* Variable declaration in pseudocode */
-        preambule(type, first_pos, symtab_next_entry);
+        preamble(type, first_pos, symtab_next_entry);
         match(';');
         /* If lookahead is another var name (ID is var name in this case) goto _varlist_head to 
         repeat the previus steps */
@@ -155,8 +155,8 @@ void vardecl(void)
             goto _varlist_head; 
         }
         else{
-            /* End of preambule */
-            preambuleend();
+            /* End of preamble */
+            preambleend();
         }
     } else {
         ;
