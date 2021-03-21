@@ -50,9 +50,9 @@ void gofalse(int);
 void mklabel(int loopnumber);
 void golabel(int loopnumber);
 void begin(void);
-void preambuledecl(int lexlevel);
-void preambule(int type, int symtab_entry, int sym_ntx_entry);
-void preambuleend(void);
+void preambledecl(int lexlevel);
+void preamble(int type, int symtab_entry, int sym_ntx_entry);
+void preambleend(void);
 void endcode(int semantic_errors);
 
 extern SYMTAB symtab[MAXSTBSIZE];
