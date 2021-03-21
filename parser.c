@@ -572,8 +572,9 @@ int fact(int fact_type)
     return fact_type;
 }
 
+/* This function is responsible for determining if a number type (integer or float) needs 
+ * 32 or 64 bits for its representation */
 int getnumtype(const char * lexeme, int type){
-    
     switch(type){
         case UINT:
             if((strtold(lexeme,NULL)) <= INT_MAX && (strtold(lexeme,NULL)) >= INT_MIN){
