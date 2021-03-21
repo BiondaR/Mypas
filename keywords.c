@@ -19,14 +19,15 @@
  * Data de criação: 21/02/2021
  * Atualizações:
  * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21
+ * 	*21/03/2021: Tradução de comentários;
  */
 
 #include <keywords.h>
 
 /* 
- * A linguagem Pascal possui palavras reservadas que denotam diferentes comandos
- * e não podem ser utilizadas como identificadores. Essas palavras devem ser 
- * reconhecidas pelo compilador.
+ * The Pascal language has reserved words that denote different commands 
+ * and cannot be used as identifiers. 
+ * These words must be recognized by the compiler.
  * 
  */
 
