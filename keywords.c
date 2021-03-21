@@ -31,8 +31,8 @@
  */
 
 /*
- * Abaixo, estão definidas as palavras reservadas da gramática simplificada da
- * linguagem Pascal.
+ * Below, they are defined as reserved words in the simplified grammar,
+ * of the Pascal language.
  * 
  */
 
