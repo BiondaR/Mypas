@@ -130,6 +130,29 @@ void push(int type)
     }
 }
 
+void pop(int type)
+{
+    switch(type) {
+    case BOOL:
+        printf("\tpopb accb\n");
+    	break;
+    case INT32:
+        printf("\tpopl accl\n");
+    	break;
+    case INT64:
+        printf("\tpopq accq\n");
+    	break;
+    case FLT32:
+        printf("\tpopf accf\n");
+    	break;
+    case FLT64:
+        printf("\tpopdf accdf\n");
+    	break;
+    default:
+    	;
+    }
+}
+
 /****************************************************************
  * The function below add the value of aux to the acc accumulator.
  * With the direction of the data flow from left to right as intel processor.
@@ -353,6 +376,7 @@ void golabel(int loopnumber)
 /* This is the header of the pseudocode, that indicates the code was compiled with our
  * compilator, and shows the developers names */
 void begin(void){
+    printf("/****************************************************************************\n");
     printf("\tThis is a simplified pascal compiler");
     printf("\n\tDeveloped by:");
     printf("\n\t\tBionda Rozin");
@@ -360,6 +384,7 @@ void begin(void){
     printf("\n\t\tNikolas Gomes de Sá");
     printf("\n\tIts use is restrict for academic proposes, only");
     printf("\n\t23/03/2021\n");
+    printf("****************************************************************************/\n");
 }
 
 /* Generates a pseudocode that indicates the begin of the preamble, where the
