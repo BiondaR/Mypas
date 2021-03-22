@@ -84,7 +84,7 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
         {
             /* Adds symbol name in the symtab */
             strcpy(symtab[symtab_next_entry].symbol, symbol);
-            /* This sprintf shows the symbol and its position in the symtab in the pseudocode*/
+            /* This sprintf shows the symbol and its lexical level, in the pseudocode*/
             sprintf(symtab[symtab_next_entry].offset, " %s[%d]", symbol, lexical_level);
             /* Adds symbols lexical level in the symtab */
             symtab[symtab_next_entry].lexical_level = lexical_level;
