@@ -260,7 +260,7 @@ void sbpdecl(void)
                 /**/symtab[sbppos].type = VOID;/**/
             }
             match(';');
-            /**/mkfplabel(sbpname);/**/
+            /**/mkfplabel(symtab[sbppos].offset);/**/
             /* Local declarations */
             declarative();
             /* Local that actually initialize the procedure/function */
@@ -520,7 +520,6 @@ int smpexpr(int smpexpr_type)
     while ( lookahead == '+' || lookahead == '-' || lookahead == OR ) {
         /**/int oplus = lookahead;/**/
         /***/smpexpr_type = iscompat(smpexpr_type, oplus);/***/
-         
         /**/push(smpexpr_type);/**/
         match (lookahead); 
         /***/term_type = /***/ term(smpexpr_type);
@@ -529,6 +528,7 @@ int smpexpr(int smpexpr_type)
         /**/move(smpexpr_type, "acc", "aux");/**/
         
         /**/
+        pop(smpexpr_type);
         switch(oplus) {
             case '+':
                 add(smpexpr_type);
@@ -560,6 +560,7 @@ int term(int term_type)
         
         /**/move(term_type, "acc", "aux");/**/
         /**/
+        pop(term_type);
         switch(otimes) {
             case '*':
                 mul(term_type);
@@ -583,6 +584,7 @@ int fact(int fact_type)
     /**/char name[MAXIDLEN+1];/**/ 
     /***/int expr_type, numtype;/***/
     /**/int lin, col;/**/
+    /**/int entry_fp;/**/
 	
     switch (lookahead) {
 	/* In this case, is imminent an (expr) */
@@ -619,9 +621,9 @@ int fact(int fact_type)
 	/* In this case, the fact is a variable, proccedure or function */
         default:
             /**/strcpy(name, lexeme);/**/  
-	    /* Saves the line and column where the lexeme was read. It may be used in the error messages */
-	    /**/
-	    lin = linecounter;
+	        /* Saves the line and column where the lexeme was read. It may be used in the error messages */
+	        /**/
+	        lin = linecounter;
             col = columncounter - strlen(name); 
             /**/
 		    
@@ -672,9 +674,9 @@ int fact(int fact_type)
                             /*** variable entry in symbol table is set in symtab_entry ***/
                             move(fact_type, symtab[symtab_entry].offset, "acc");
                             break;
-                        case 3:
-			    /* Generate a pseudocode to call the function */
-                            /**/callfp(symtab[symtab_entry].symbol);/**/
+                        default://(case 2 or case 3)
+			    /* Generate a pseudocode to call the function/procedure */
+                            /**/entry_fp = symtab_entry;/**/  
 			    /* Matches the parameters */
                             if (lookahead == '(') {
                                 match('(');
@@ -683,10 +685,11 @@ int fact(int fact_type)
                                 if (lookahead == ',') { match(','); goto _expr_list; }
                                 match(')');
                             }
+                            /**/callfp(symtab[entry_fp].offset);/**/
 			    /* Checks the compatibilty between fact_type and the variable type */
-                            fact_type = iscompat(fact_type, symtab[symtab_entry].type);
+                            fact_type = iscompat(fact_type, symtab[entry_fp].type);
                             /*** variable entry in symbol table is set in symtab_entry ***/
-                            /**/move(fact_type, symtab[symtab_entry].offset, "acc");/**/
+                            ///**/move(fact_type, symtab[symtab_entry].offset, "acc");/**/
                             break;
                     }
                 }
