@@ -22,7 +22,6 @@
  *	*02/03/2021: Adição de comentários;
  *  *14/03/2021: Adição da verificação de symtab overflow;
  *  *18/03/2021: Adição de comentários;
- *  *20/03/2021: Modificação da representação do símbolo no pseudocode, na função symtab_append;
  *
  */
 
@@ -86,7 +85,7 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
             /* Adds symbol name in the symtab */
             strcpy(symtab[symtab_next_entry].symbol, symbol);
             /* This sprintf shows the symbol and its position in the symtab in the pseudocode*/
-            sprintf(symtab[symtab_next_entry].offset, " %s symtab[%d]", symbol, symtab_next_entry);
+            sprintf(symtab[symtab_next_entry].offset, " %s[%d]", symbol, lexical_level);
             /* Adds symbols lexical level in the symtab */
             symtab[symtab_next_entry].lexical_level = lexical_level;
             /* Adds symbols object type in the symtab */
