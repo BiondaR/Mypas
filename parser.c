@@ -134,6 +134,9 @@ void declarative(void)
 /*****************************************************************************
  * vardecl ->  [ VAR varlist : typemod ; { varlist : typemod ; } ]
  *****************************************************************************/
+/*****************************************************************************
+ * Variables declaration
+ ****************************************************************************/
 void vardecl(void)
 {
     if (lookahead == VAR ) {
@@ -173,6 +176,9 @@ void vardecl(void)
 /*****************************************************************************
  * varlist -> ID { , ID }
  *****************************************************************************/
+/*****************************************************************************
+ * This function insert variables in the symtab
+ ****************************************************************************/
 /**/int semantic_error = 0;/**/
 void varlist(void)
 {
@@ -211,6 +217,9 @@ int typemod(void)
 /*****************************************************************************
  * sbpdecl -> { PROCEDURE ID formparm ; declarative imperative ; | FUNCTION ID formparm : typemod ; declarative imperative ; }
  *****************************************************************************/
+/*****************************************************************************
+ * Function/Procedure declaration
+ ****************************************************************************/
 void sbpdecl(void)
 {
     /**/int isfunc = 0;/**/
@@ -272,6 +281,9 @@ void sbpdecl(void)
 /*****************************************************************************
  * formparm -> [ ( [VAR] varlist : typemod { ; [VAR] varlist : typemod } ) ]
  *****************************************************************************/
+/*****************************************************************************
+ * Parameters declaration
+ ****************************************************************************/
 void formparm(void)
 {
     /* If lookahead = '(', have parameter */
@@ -306,6 +318,9 @@ void formparm(void)
 /*****************************************************************************
  * imperative -> BEGIN stmt { ; stmt } END
  *****************************************************************************/
+/*****************************************************************************
+ * Local that actually initialize the code
+ ****************************************************************************/
 void imperative(void)
 {
     match(BEGIN);
@@ -317,18 +332,24 @@ void imperative(void)
     match(END);
 }
 
+/*****************************************************************************
+ * RETURN declaration
+ ****************************************************************************/
 void rtrn(void)
 {
     match(RETURN);
-    /* Get the type to put it on a register thats correspond the type of the expression to return its value */
+    /* Get the type to put it on a register thats correspond the type of the expression to return its type */
     int exp_type = expr(VOID);
     /* Print the return register type in pseudocode */
     ret(exp_type); 
 }
 
-/*****************************************************************************
+/******************************************************************************
  * stmt -> imperative | ifstmt | whlstmt | rptstmt | fact | <empty>
  *****************************************************************************/
+/******************************************************************************
+ * The function below decide the code "body" 
+ * ***************************************************************************/
 void stmt(void)
 {
     /**/int fact_type;/**/
@@ -359,7 +380,11 @@ void stmt(void)
 
 /*****************************************************************************
  * ifstmt -> IF expr THEN stmt [ ELSE stmt ]
- *****************************************************************************/
+ ****************************************************************************/
+/*****************************************************************************
+ * This function below create labels of ELSE and the end of ifstmt. 
+ * And add them to the pseudocode
+ ****************************************************************************/
 /**/int loop_count = 1;/**/
 void ifstmt(void)
 {
@@ -388,6 +413,11 @@ void ifstmt(void)
 /*****************************************************************************
  * whlstmt -> WHILE expr DO stmt
  *****************************************************************************/
+/*****************************************************************************
+ * This function is responsible for create a WHILE label
+ * and the creation of a label that is the end of whlstmt.
+ * And add them to the pseudocode
+ ****************************************************************************/
 void whlstmt(void)
 {
     /* loop_count in this whlstmt is a counter to check how many times call WHILE label */
@@ -407,6 +437,10 @@ void whlstmt(void)
 
 /*****************************************************************************
  * rptstmt -> REPEAT stmt { ; stmt } UNTIL expr
+ *****************************************************************************/
+/*****************************************************************************
+ * This function is responsible for create a UNTIL label.
+ * And add it to the pseudocode
  *****************************************************************************/
 void rptstmt(void)
 {
@@ -585,15 +619,20 @@ int fact(int fact_type)
 	/* In this case, the fact is a variable, proccedure or function */
         default:
             /**/strcpy(name, lexeme);/**/  
+<<<<<<< Updated upstream
 	    /* Saves the line and column where the lexeme was read. It may be used in the error messages */
 	    lin = linecounter;
+=======
+	        lin = linecounter;
+>>>>>>> Stashed changes
             col = columncounter - strlen(name); 
             
             match(ID);
 	    /* Checks if the fact is an assignment */
             if (lookahead == ASGN) {
                 /**** L-Value ****/
-                match(ASGN); /***/expr_type = /***/expr(fact_type);
+                match(ASGN); 
+                /***/expr_type = /***/expr(fact_type);
                 /**/
 		/* If the variable wasn't declared, shows an error message and increments "semantic_error" */
                 if ( symtab_lookup(name) < 0 ) {
