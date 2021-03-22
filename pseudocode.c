@@ -22,6 +22,7 @@
   *     *17/03/2021: Melhoeria na função move;
   *     *19/03/2021: Adição da função ret, callfunc, mkfunclabel;
   *     *20/03/2021: Adição de begin, preambuledecl, preambuleend, undeclared, begin e endcode;
+  *     *21/03/2021: Adição de comentários no resto do pseudocódigo;
   *
   */
 
@@ -32,6 +33,20 @@
  * which aims to encapsulate the methods and organize the code, one of the possible applications 
  * of this program is to transform a 'printf' into a primitive, in other words, a semantic action being reduced.
 */
+
+/** suffix table: **/
+/****************************************************************
+ *          BOOL    INT32    INT64    FLT32    FLT64
+ * suffix     b       l        q        f        df
+ * 
+ ***************************************************************/
+
+/** instr table: **/
+/****************************************************************
+ *          '>'    '<'    '='    NEQ    LEQ    GEQ
+ * instr     b      lt     eq    neq    leq    geq
+ * 
+ ***************************************************************/
 
 /****************************************************************
  * The function below negate the register depending on the type.
@@ -60,6 +75,12 @@ void negate(int type)
     }
 }
 
+/****************************************************************
+ * The function below move the value of source to the destination.
+ * With the direction of the data flow from left to right.
+ * And write a pseudocode 
+ * with the suffixes corresponding to the correct types
+ ***************************************************************/
 void move(int type, const char *src, const char *dest)
 {
     switch(type) {
@@ -83,6 +104,9 @@ void move(int type, const char *src, const char *dest)
     }
 }
 
+/****************************************************************
+ * 
+ ***************************************************************/
 void push(int type)
 {
     switch(type) {
@@ -106,6 +130,12 @@ void push(int type)
     }
 }
 
+/****************************************************************
+ * The function below add the value of aux to the acc accumulator.
+ * With the direction of the data flow from left to right as intel processor.
+ * And write a pseudocode 
+ * with the suffixes corresponding to the correct types
+ ***************************************************************/
 void add(int type)
 {
     switch(type) {
@@ -126,6 +156,12 @@ void add(int type)
     }
 }
 
+/****************************************************************
+ * The function below take the aux value to subtract the acc accumulator.
+ * With the direction of the data flow from left to right as intel processor.
+ * And write a pseudocode 
+ * with the suffixes corresponding to the correct types
+ ***************************************************************/
 void sub(int type)
 {
     switch(type) {
@@ -146,6 +182,14 @@ void sub(int type)
     }
 }
 
+/****************************************************************
+ * The function below take the aux value to multiplicate the previus destination 
+ * register in the function move and store the result in the same destination 
+ * register.
+ * With the direction of the data flow from left to right as intel processor.
+ * And write a pseudocode 
+ * with the suffixes corresponding to the correct types
+ ***************************************************************/
 void mul(int type)
 {
     switch(type) {
@@ -166,6 +210,15 @@ void mul(int type)
     }
 }
 
+/****************************************************************
+ * The function below take the aux value to divide the previus destination 
+ * register in the function move, store the quotient in the same destination 
+ * register and store the rest result in another register predetermined by 
+ * local processor.
+ * With the direction of the data flow from left to right as intel processor.
+ * And write a pseudocode 
+ * with the suffixes corresponding to the correct types
+ ***************************************************************/
 void divl(int type)
 {
     switch(type) {
@@ -192,6 +245,7 @@ void divl(int type)
  ***************************************************************/
 void cmp (int relop, int type, char *aux, char *acc) {
     char *suffix = "", *instr = "";
+    /* Prepare suffix type */
     switch(type) {
         case BOOL:
             suffix = "b";
@@ -211,6 +265,7 @@ void cmp (int relop, int type, char *aux, char *acc) {
         default:
             ;
     }
+    /* Prepare instruction */
     switch(relop) {
         case '>':
             instr = "gt";
