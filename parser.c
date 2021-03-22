@@ -109,7 +109,7 @@ int iscompat(int acc_type, int syn_type)
 /**/int transp_type;/**/
 void mypas(void) 
 { 
-    begin();
+    /**/begin();/**/
     match(PROGRAM);
     match(ID);
     match(';'); 
@@ -119,7 +119,7 @@ void mypas(void)
     imperative(); 
     /**/lexical_level--;/**/
     match ('.');
-    endcode(semantic_error);
+    /**/endcode(semantic_error);/**/
 }
 
 /*****************************************************************************
@@ -146,7 +146,7 @@ void vardecl(void)
         transp_type = 1 => local storage;*/
         /**/objtype = transp_type = 1;/**/
         /* Preamble start */
-        preambledecl(lexical_level);
+        /**/preambledecl(lexical_level);/**/
         _varlist_head:
         /**/first_pos = symtab_next_entry;/**/
         varlist();
@@ -157,7 +157,7 @@ void vardecl(void)
         INT32 or FLT32 => Data_size = 4, FLT64 => Data_size = 8, BOOL => Data_size = 2 */
         /**/symtab_update_type(first_pos, type);/**/
         /* Variable declaration in pseudocode */
-        preamble(type, first_pos, symtab_next_entry);
+        /**/preamble(type, first_pos, symtab_next_entry);/**/
         match(';');
         /* If lookahead is another var name (ID is var name in this case) goto _varlist_head to 
         repeat the previus steps */
@@ -166,7 +166,7 @@ void vardecl(void)
         }
         else{
             /* End of preamble */
-            preambleend();
+            /**/preambleend();/**/
         }
     } else {
         ;
@@ -260,7 +260,7 @@ void sbpdecl(void)
                 /**/symtab[sbppos].type = VOID;/**/
             }
             match(';');
-            mkfunclabel(sbpname);
+            /**/mkfplabel(sbpname);/**/
             /* Local declarations */
             declarative();
             /* Local that actually initialize the procedure/function */
@@ -339,9 +339,9 @@ void rtrn(void)
 {
     match(RETURN);
     /* Get the type to put it on a register thats correspond the type of the expression to return its type */
-    int exp_type = expr(VOID);
+    /**/int exp_type = /**/expr(VOID);
     /* Print the return register type in pseudocode */
-    ret(exp_type); 
+    /**/ret(exp_type); /**/
 }
 
 /******************************************************************************
@@ -582,7 +582,7 @@ int fact(int fact_type)
 {
     /**/char name[MAXIDLEN+1];/**/ 
     /***/int expr_type, numtype;/***/
-    int lin, col;
+    /**/int lin, col;/**/
 	
     switch (lookahead) {
 	/* In this case, is imminent an (expr) */
@@ -620,9 +620,11 @@ int fact(int fact_type)
         default:
             /**/strcpy(name, lexeme);/**/  
 	    /* Saves the line and column where the lexeme was read. It may be used in the error messages */
-	        lin = linecounter;
+	    /**/
+	    lin = linecounter;
             col = columncounter - strlen(name); 
-            
+            /**/
+		    
             match(ID);
 	    /* Checks if the fact is an assignment */
             if (lookahead == ASGN) {
@@ -632,19 +634,23 @@ int fact(int fact_type)
                 /**/
 		/* If the variable wasn't declared, shows an error message and increments "semantic_error" */
                 if ( symtab_lookup(name) < 0 ) {
-                    undeclared(lin, col, name);
+                    /**/
+		    undeclared(lin, col, name);
                     semantic_error++;
-                } else {
+                    /**/
+		} else {
 		    /* If the object isn't a variable, shows an error message and increments "semantic_error" */
                     if (symtab[symtab_entry].objtype != 1) {
-                        fprintf(stderr, "%s cannot be an L-Value\n", name);
+			/**/
+                        fprintf(stderr, "Ln %d, Col %d: %s cannot be an L-Value\n", lin, col, name);
                         semantic_error++;
+			/**/
                     } else {
 			/* Checks the compatibilty between expr_type and the variable type */
                         fact_type = iscompat(expr_type, symtab[symtab_entry].type);
                         
                         /*** variable entry in symbol table is set in symtab_entry ***/
-                        move(fact_type, "acc", symtab[symtab_entry].offset);                        
+                        /**/move(fact_type, "acc", symtab[symtab_entry].offset);/**/
                     }
                 }
                 /**/
@@ -653,8 +659,10 @@ int fact(int fact_type)
                 /**/
 		/* If the variable wasn't declared, shows an error message and increments "semantic_error" */
                 if ( symtab_lookup(name) < 0 ) {
+		    /**/
                     undeclared(lin, col, name);
                     semantic_error++;
+		    /**/
                 } else {
                     /* Checks if the object is a variable, procedure or function */
                     switch(symtab[symtab_entry].objtype) {
@@ -666,7 +674,7 @@ int fact(int fact_type)
                             break;
                         case 3:
 			    /* Generate a pseudocode to call the function */
-                            callfunc(symtab[symtab_entry].symbol);
+                            /**/callfp(symtab[symtab_entry].symbol);/**/
 			    /* Matches the parameters */
                             if (lookahead == '(') {
                                 match('(');
@@ -678,7 +686,7 @@ int fact(int fact_type)
 			    /* Checks the compatibilty between fact_type and the variable type */
                             fact_type = iscompat(fact_type, symtab[symtab_entry].type);
                             /*** variable entry in symbol table is set in symtab_entry ***/
-                            move(fact_type, symtab[symtab_entry].offset, "acc");
+                            /**/move(fact_type, symtab[symtab_entry].offset, "acc");/**/
                             break;
                     }
                 }
@@ -842,11 +850,13 @@ char* tokenType(int expected) {
 void match(int expected)
 {	
 	if (lookahead != expected) {
+		/**/
 		char *token_expected;
 		char *token_lookahead;
 	
 		token_expected = tokenType(expected);
 		token_lookahead = tokenType(lookahead);
+		
 		if(token_lookahead == "CHAR") {
 			fprintf(stderr,"Ln %d, Col %d: token mismatch: expected %s whereas found %c\n",
 		linecounter, (columncounter - 1), token_expected, lookahead);
@@ -854,6 +864,7 @@ void match(int expected)
 			fprintf(stderr,"Ln %d, Col %ld: token mismatch: expected %s whereas found %s\n",
 		linecounter, (columncounter - strlen(lexeme)), token_expected, token_lookahead);
 		}
+		/**/
 	}
 	
 	/* Analysis of next buffer token */
