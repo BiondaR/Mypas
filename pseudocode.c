@@ -23,6 +23,7 @@
   *     *19/03/2021: Adição da função ret, callfunc, mkfunclabel;
   *     *20/03/2021: Adição de begin, preambuledecl, preambuleend, undeclared, begin e endcode;
   *     *21/03/2021: Adição de comentários no resto do pseudocódigo;
+  *     *22/03/2021: Adição da função pop;
   *
   */
 
@@ -105,7 +106,7 @@ void move(int type, const char *src, const char *dest)
 }
 
 /****************************************************************
- * 
+ * Stores the value of the register at the top of the stack
  ***************************************************************/
 void push(int type)
 {
@@ -130,6 +131,10 @@ void push(int type)
     }
 }
 
+/****************************************************************
+ * The pop function takes the value from the top of the stack
+ * and stores it in the register
+ ***************************************************************/
 void pop(int type)
 {
     switch(type) {
