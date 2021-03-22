@@ -422,7 +422,6 @@ void rptstmt(void)
     /**/gofalse(replbl);/**/
 }
 
-/* expr -> smpexpr [ relop smpexpr ] */
 /****************************************************************
  * The isrelop, checks the comparison signal cases.
  * Case lookahead is none of them, return 0, that means
@@ -442,6 +441,8 @@ int isrelop(void)
     return 0;
 }
 
+
+/* expr -> smpexpr [ relop smpexpr ] */
 int expr(int expr_type)
 {
     /**/int relop; int left_type, right_type;/**/
@@ -543,8 +544,6 @@ int term(int term_type)
  *       | n
  *       | v [ = expr ]
  */
-
-
 int fact(int fact_type) 
 {
     /**/char name[MAXIDLEN+1];/**/ 
@@ -552,10 +551,16 @@ int fact(int fact_type)
     int lin, col;
 	
     switch (lookahead) {
+	/* In this case, is imminent an (expr) */
         case '(':
             match('('); /***/expr_type = /***/expr(fact_type); match(')');
+	    /* Checks if initial fact type is compatible with obtained expr type */
             /***/fact_type = iscompat(fact_type, expr_type);/***/
             break;
+	/* In the next cases, the fact is a boolean, integer or float type, respectively.
+	 * We verify the type compatibility with "iscompat" and then, we generate a pseudocode
+	 * to move the fact to an acc register. For integers and floats, we verify if the number
+	 * needs 32 or 64 bits to be represented */
         case BOOL:
             /***/fact_type = iscompat(fact_type, BOOL);/***/
             
@@ -577,24 +582,30 @@ int fact(int fact_type)
 
             match(FLOAT);
             break;
+	/* In this case, the fact is a variable, proccedure or function */
         default:
             /**/strcpy(name, lexeme);/**/  
+	    /* Saves the line and column where the lexeme was read. It may be used in the error messages */
 	    lin = linecounter;
             col = columncounter - strlen(name); 
             
             match(ID);
+	    /* Checks if the fact is an assignment */
             if (lookahead == ASGN) {
                 /**** L-Value ****/
                 match(ASGN); /***/expr_type = /***/expr(fact_type);
                 /**/
+		/* If the variable wasn't declared, shows an error message and increments "semantic_error" */
                 if ( symtab_lookup(name) < 0 ) {
                     undeclared(lin, col, name);
                     semantic_error++;
                 } else {
+		    /* If the object isn't a variable, shows an error message and increments "semantic_error" */
                     if (symtab[symtab_entry].objtype != 1) {
                         fprintf(stderr, "%s cannot be an L-Value\n", name);
                         semantic_error++;
                     } else {
+			/* Checks the compatibilty between expr_type and the variable type */
                         fact_type = iscompat(expr_type, symtab[symtab_entry].type);
                         
                         /*** variable entry in symbol table is set in symtab_entry ***/
@@ -605,19 +616,23 @@ int fact(int fact_type)
             } else {
                 /**** R-Value ****/
                 /**/
+		/* If the variable wasn't declared, shows an error message and increments "semantic_error" */
                 if ( symtab_lookup(name) < 0 ) {
                     undeclared(lin, col, name);
                     semantic_error++;
                 } else {
-                    /*** objtype = 1 => variable; = 2 => procedure; = 3 => function ***/
+                    /* Checks if the object is a variable, procedure or function */
                     switch(symtab[symtab_entry].objtype) {
                         case 1:
+			    /* Checks the compatibilty between fact_type and the variable type */
                             fact_type = iscompat(fact_type, symtab[symtab_entry].type);
                             /*** variable entry in symbol table is set in symtab_entry ***/
                             move(fact_type, symtab[symtab_entry].offset, "acc");
                             break;
                         case 3:
+			    /* Generate a pseudocode to call the function */
                             callfunc(symtab[symtab_entry].symbol);
+			    /* Matches the parameters */
                             if (lookahead == '(') {
                                 match('(');
                                 _expr_list:
@@ -625,6 +640,7 @@ int fact(int fact_type)
                                 if (lookahead == ',') { match(','); goto _expr_list; }
                                 match(')');
                             }
+			    /* Checks the compatibilty between fact_type and the variable type */
                             fact_type = iscompat(fact_type, symtab[symtab_entry].type);
                             /*** variable entry in symbol table is set in symtab_entry ***/
                             move(fact_type, symtab[symtab_entry].offset, "acc");
@@ -634,6 +650,7 @@ int fact(int fact_type)
                 /**/
             }
     }
+    /* Returns the fact type */
     return fact_type;
 }
 
