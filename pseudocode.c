@@ -33,6 +33,10 @@
  * of this program is to transform a 'printf' into a primitive, in other words, a semantic action being reduced.
 */
 
+/****************************************************************
+ * The function below negate the register depending on the type.
+ * And write a correspondent pseudocode
+ ***************************************************************/
 void negate(int type)
 {
     switch(type) {
@@ -182,6 +186,10 @@ void divl(int type)
     }
 }
 
+/****************************************************************
+ * The cmp function write a pseudocode that represents
+ * assembly compare in local processor with its types
+ ***************************************************************/
 void cmp (int relop, int type, char *aux, char *acc) {
     char *suffix = "", *instr = "";
     switch(type) {
@@ -259,12 +267,12 @@ void undeclared (int line, long int col, char *name) {
     printf("Ln %d, Col %ld: %s undeclared\n", line, col, name);
 }
 
-/* Call a function by its label */
+/* Call a function/procedure by its label */
 void callfunc(char *funcname){
     printf("\tcall %s\n", funcname);
 }
 
-/* Create a label to a function */
+/* Create a label to a function/procedure */
 void mkfunclabel(char *funcname){
     printf("%s:\n", funcname);
 }
