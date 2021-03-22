@@ -27,8 +27,8 @@
   *     *20/03/2021: Adição de modularizações e comentários;
   *     *20/03/2021: Correção de erros na criação de labels de função, correção de erros na chamada de return, adição de um move em expr;
   *     *20/03/2021: Correção de erro no iscompat;
-  *     *20/03/2021: Adição de comentários no iscompat, sbpdecl and formparm;
-  *     *21/03/2021: Adição de comentários no imperative, rtrn, stmt, ifstmt, whlstmt, rptstmt and isrelop;
+  *     *20/03/2021: Adição de comentários no iscompat, sbpdecl e formparm;
+  *     *21/03/2021: Adição de comentários no imperative, rtrn, stmt, ifstmt, whlstmt, rptstmt, isrelop e fact;
   *     *21/03/2021: Correção nos valores da passagem de parâmetro da função undeclared;
   *
   */
@@ -619,12 +619,8 @@ int fact(int fact_type)
 	/* In this case, the fact is a variable, proccedure or function */
         default:
             /**/strcpy(name, lexeme);/**/  
-<<<<<<< Updated upstream
 	    /* Saves the line and column where the lexeme was read. It may be used in the error messages */
-	    lin = linecounter;
-=======
 	        lin = linecounter;
->>>>>>> Stashed changes
             col = columncounter - strlen(name); 
             
             match(ID);
