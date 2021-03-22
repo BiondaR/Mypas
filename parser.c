@@ -549,7 +549,8 @@ int fact(int fact_type)
 {
     /**/char name[MAXIDLEN+1];/**/ 
     /***/int expr_type, numtype;/***/
-    
+    int lin, col;
+	
     switch (lookahead) {
         case '(':
             match('('); /***/expr_type = /***/expr(fact_type); match(')');
@@ -577,7 +578,9 @@ int fact(int fact_type)
             match(FLOAT);
             break;
         default:
-            /**/strcpy(name, lexeme);/**/     
+            /**/strcpy(name, lexeme);/**/  
+	    lin = linecounter;
+            col = columncounter - strlen(name); 
             
             match(ID);
             if (lookahead == ASGN) {
@@ -585,7 +588,7 @@ int fact(int fact_type)
                 match(ASGN); /***/expr_type = /***/expr(fact_type);
                 /**/
                 if ( symtab_lookup(name) < 0 ) {
-                    undeclared(linecounter, (columncounter - strlen(lexeme)), name);
+                    undeclared(lin, col, name);
                     semantic_error++;
                 } else {
                     if (symtab[symtab_entry].objtype != 1) {
@@ -603,7 +606,7 @@ int fact(int fact_type)
                 /**** R-Value ****/
                 /**/
                 if ( symtab_lookup(name) < 0 ) {
-                    undeclared(linecounter, (columncounter - strlen(lexeme)), name);
+                    undeclared(lin, col, name);
                     semantic_error++;
                 } else {
                     /*** objtype = 1 => variable; = 2 => procedure; = 3 => function ***/
