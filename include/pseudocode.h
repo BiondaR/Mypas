@@ -37,6 +37,7 @@
 void negate(int type);
 void move(int type, const char *src, const char *dest);
 void push(int type);
+void pop(int type);
 void add(int type);
 void sub(int type);
 void mul(int type);
