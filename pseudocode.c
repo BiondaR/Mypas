@@ -323,12 +323,12 @@ void undeclared (int line, long int col, char *name) {
 }
 
 /* Call a function/procedure by its label */
-void callfunc(char *funcname){
+void callfp(char *funcname){
     printf("\tcall %s\n", funcname);
 }
 
 /* Create a label to a function/procedure */
-void mkfunclabel(char *funcname){
+void mkfplabel(char *funcname){
     printf("%s:\n", funcname);
 }
 
