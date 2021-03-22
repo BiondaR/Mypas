@@ -30,6 +30,7 @@
   *     *20/03/2021: Adição de comentários no iscompat, sbpdecl e formparm;
   *     *21/03/2021: Adição de comentários no imperative, rtrn, stmt, ifstmt, whlstmt, rptstmt, isrelop e fact;
   *     *21/03/2021: Correção nos valores da passagem de parâmetro da função undeclared;
+  *     *22/03/2021: Adição da chamada do pop;
   *
   */
 
@@ -689,7 +690,6 @@ int fact(int fact_type)
 			    /* Checks the compatibilty between fact_type and the variable type */
                             fact_type = iscompat(fact_type, symtab[entry_fp].type);
                             /*** variable entry in symbol table is set in symtab_entry ***/
-                            ///**/move(fact_type, symtab[symtab_entry].offset, "acc");/**/
                             break;
                     }
                 }
