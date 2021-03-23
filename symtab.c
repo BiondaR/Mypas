@@ -18,7 +18,7 @@
 /*
  * Data de criação: 21/02/2021
  * Atualizações:
- * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21
+ * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21;
  *	*02/03/2021: Adição de comentários;
  *  *14/03/2021: Adição da verificação de symtab overflow;
  *  *18/03/2021: Adição de comentários;
@@ -56,7 +56,7 @@ int symtab_entry;
  ****************************************************************************/
 int symtab_lookup(const char *symbol)
 {
-    /* Go through the symtable */
+    /* Go through the symtab */
     for (symtab_entry = symtab_next_entry - 1; symtab_entry > -1; symtab_entry--)
     {
         /* checks if the symbol exists in the symtab */
@@ -97,7 +97,7 @@ int symtab_append(const char *symbol, int lexical_level, int objtype, int transp
         }
         else
         {
-            /* There already have the symbol name in that lexical level */
+            /* The symbol already exists in that lexical level */
             fprintf(stderr, "symtab_append: %s multiply defined in current lexical level %d\n", symbol, lexical_level);
             semantic_error++;
             return -2;
