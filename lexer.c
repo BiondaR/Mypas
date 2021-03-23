@@ -19,9 +19,9 @@
   * Data de criação: 21/02/2021
   *  Atualizações:
   * 	*27/02/2021: Adição das modificações realizadas em aula no dia 24/02/21;
-  *	    *27/02/2021: Adição de comentários e de um contador de colunas;
-  *	    *02/03/2021: Adição de comentários;
-  *	    *16/03/2021: Correção de bugs na forma como o columncounter contava colunas;
+  *	*27/02/2021: Adição de comentários e de um contador de colunas;
+  *	*02/03/2021: Adição de comentários;
+  *	*16/03/2021: Correção de bugs na forma como o columncounter contava colunas;
   *     *20/03/2021: Correção de bugs na forma como o columncounter contava colunas;
   */
 
@@ -38,8 +38,8 @@
  * 
  */
 
-/* The column counter is incremented for each character read from the tape, in each of the functions present in lexer.c,
- * is reseted to 1 for each new line started
+/* The column counter is incremented for each character read from the tape, in the functions in the lexer.c,
+ * and is reseted to 1 for each new line started
  */
 int columncounter = 1;
 /* The line counter is incremented when a '\n' character is found */
@@ -89,8 +89,8 @@ void skipunused(FILE *tape)
  */
 
 /* The 'lookahead' variable gets each word/ID/number/etc of the tape. The lexeme is compared to the expected term and, 
-* if it didn't match, there is a semantic error (token mismatch).
-*/
+ * if it didn't match, there is a semantic error (token mismatch).
+ */
 int lookahead;
 
 /* The 'lexeme' variable is used to read each character/word in the tape and those words will go through a lexical analysis. */
@@ -106,8 +106,8 @@ int isID(FILE *tape)
 		
 		columncounter++;
 		/* If the character read is not alphanumeric, it only returns ID. Otherwise, we will continue accepting all 
-         	* characters that will come, checking only if the size doesn't exceed the limit of MAXIDLEN.
-         	*/
+         * characters that will come, checking only if the size doesn't exceed the limit of MAXIDLEN.
+         */
 		while ( isalnum ( lexeme[i] = getc (tape) ) ) {
 			if(i < MAXIDLEN) {
 				columncounter++;
@@ -115,8 +115,8 @@ int isID(FILE *tape)
 			}
 		}
 		/* So we consume all the characters and just return the last character 
-         	* read that it doesn't fit this category. 
-         	*/
+         * read that it doesn't fit this category. 
+         */
 		ungetc ( lexeme[i], tape );
 		lexeme[i] = 0;
 		/* We make a last test to verify if the ID read is a reserved word.
@@ -226,9 +226,9 @@ int isNUM(FILE* tape){
              */
             while(isdigit(lexeme[i] = getc(tape))){
                 if(i < MAXIDLEN){
-			columncounter++;
-			i++;
-		}
+			        columncounter++;
+			        i++;
+		        }
             }
             /* We give back the non-digit character to the tape and the next step 
              * is to check if there is an exponential expression in sequence
@@ -304,7 +304,7 @@ int isNUM(FILE* tape){
             else{
                 ungetc(lexeme[i], tape);        /* Character isn't digit */
                 i--;
-                if(plusminus){                  /* If we receive an oplus, we give it back */
+                if(plusminus){                  /* If we received an oplus, we give it back */
                     i--;
 		            columncounter--;
                     ungetc(plusminus, tape);
@@ -343,9 +343,9 @@ int isOCT(FILE* tape){
              */
             while(isdigit(lexeme[i] = getc(tape)) && lexeme[i] <= '7'){
                 if(i < MAXIDLEN){
-			columncounter++;
-			i++;
-		}
+			        columncounter++;
+			        i++;
+		        }
             }
             /* So we consume all the octal digits and just give back the last character 
              * read that it doesn't fit this category. Finally, we return the OCT classification. 
@@ -440,7 +440,7 @@ int isASGN(FILE *tape)
 	/* Initially, the character ':' is expected in an assignment */
 	if ( (lexeme[0] = getc(tape)) == ':' ) {
 		columncounter++;
-		/* we check if the next character is a '=' */
+		/* We check if the next character is a '=' */
 		if ( (lexeme[1] = getc(tape)) == '=' ) {
 			/* In this case, we have an assignment */
 			columncounter++;
@@ -451,7 +451,7 @@ int isASGN(FILE *tape)
 		columncounter--;
 		ungetc(lexeme[1], tape);
 	}
-	/* In this case, the character read is not ':' and there is no assignment */
+	/* In this case, the character read was not ':' and there is no assignment */
 	ungetc(lexeme[0], tape);
 	lexeme[0] = 0;
 	return 0;
@@ -460,8 +460,8 @@ int isASGN(FILE *tape)
 /* A relational operator is used to construct Boolean expressions
  * In Pascal, a relational operator can have one of the following formats:
  * = (EQUAL)
- *> (GREATER THAN)
- *> = (GREATER THAN OR EQUAL)
+ * > (GREATER THAN)
+ * > = (GREATER THAN OR EQUAL)
  * <(LESS THAN)
  * <= (LESS THAN OR EQUAL)
  * <> (NOT EQUAL)
@@ -544,5 +544,6 @@ int gettoken(FILE *source)
 	
 	token = lexeme[0] = getc (source);
 	columncounter++;
+    
 	return token;
 }
