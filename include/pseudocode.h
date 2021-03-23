@@ -21,6 +21,7 @@
   *   *17/03/2021: Adição de cmp;
   *   *19/03/2021: Adição da função ret, callfunc, mkfunclabel;
   *   *20/03/2021: Adição de begin, preambuledecl, preambuleend, undeclared e endcode;
+  *   *22/03/2021: Adição de pop;
   */
 #pragma once
 /* "Prevenção" contra includes e declarações repetidas" */
