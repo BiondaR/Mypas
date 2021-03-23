@@ -42,6 +42,10 @@
  * 
  ***************************************************************/
 
+/****************************************************************
+ * If there is no suffix, any code will be generated
+ ***************************************************************/ 
+
 /** instr table: **/
 /****************************************************************
  *          '>'    '<'    '='    NEQ    LEQ    GEQ
@@ -159,7 +163,7 @@ void pop(int type)
 }
 
 /****************************************************************
- * The function below add the value of aux to the acc accumulator.
+ * The function below adds the value of aux to the acc accumulator.
  * With the direction of the data flow from left to right as intel processor.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
@@ -185,7 +189,7 @@ void add(int type)
 }
 
 /****************************************************************
- * The function below take the aux value to subtract the acc accumulator.
+ * The function below takes the aux value to subtract the acc accumulator.
  * With the direction of the data flow from left to right as intel processor.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
@@ -322,9 +326,11 @@ void cmp (int relop, int type, char *aux, char *acc) {
     
 }
 
-/* Generate a pseudocode for "return" command.
+/****************************************************************
+ * Generate a pseudocode for "return" command.
  * Each type, determined by the returned element, has a code modifier (a suffix).
- * If there is an invalid type, the function doesn't generate any code */
+ * If there is an invalid type, the function doesn't generate any code
+ ****************************************************************/
 void ret(int type) {
     switch(type) {
     case INT32:
@@ -344,42 +350,58 @@ void ret(int type) {
     }
 }
 
-/* Generate a pseudocode when a variable is undeclared and shows the line and column 
- * where this semantic error occours */
+/****************************************************************
+ * Generate a pseudocode when a variable is undeclared and 
+ * shows the line and column where this semantic error occours
+ *****************************************************************/
 void undeclared (int line, long int col, char *name) {
     printf("Ln %d, Col %ld: %s undeclared\n", line, col, name);
 }
 
-/* Call a function/procedure by its label */
+/**************************************************************** 
+ * Call a function/procedure by its label
+ ****************************************************************/
 void callfp(char *funcname){
     printf("\tcall %s\n", funcname);
 }
 
-/* Create a label to a function/procedure */
+/****************************************************************
+ * Create a label to a function/procedure
+ ****************************************************************/
 void mkfplabel(char *funcname){
     printf("%s:\n", funcname);
 }
 
-/* Generate a pseudocode instruction that indicates if a cmp instruction is false, 
- * it may go to the indicated label */
+/****************************************************************
+ * Generate a pseudocode instruction that indicates if a cmp 
+ * instruction is false, it may go to the indicated label
+ ****************************************************************/
 void gofalse(int loopnumber)
 {
     printf("\tgofalse .L%d\n", loopnumber);
 }
 
-/* Create a generic label */
+/****************************************************************
+ * Create a generic label
+ ****************************************************************/
 void mklabel(int loopnumber) {
     printf(".L%d:\n", loopnumber);
 }
 
-/* This instruction indicates that the code may jump to the indicated label */
+/****************************************************************
+ * This instruction indicates that the code may jump 
+ * to the indicated label
+ ****************************************************************/
 void golabel(int loopnumber)
 {
     printf("\tgoto .L%d\n", loopnumber);
 }
 
-/* This is the header of the pseudocode, that indicates the code was compiled with our
- * compilator, and shows the developers names */
+/****************************************************************
+ * This is the header of the pseudocode, that indicates the 
+ * code was compiled with our compilator, and shows the 
+ * developers names
+ ****************************************************************/
 void begin(void){
     printf("/****************************************************************************\n");
     printf("\tThis is a simplified pascal compiler");
@@ -392,15 +414,19 @@ void begin(void){
     printf("****************************************************************************/\n");
 }
 
-/* Generates a pseudocode that indicates the begin of the preamble, where the
- * variables are declared */
+/****************************************************************
+ * Generates a pseudocode that indicates the begin of the 
+ * preamble, where the variables are declared
+ ****************************************************************/
 void preambledecl(int lexlevel) {
     printf("\n.decl:\n");
     printf("\tlex_level %d\n", lexlevel);
 }
 
-/* Generates the preamble itself, where each variable for that lexical level is
- * declared */
+/****************************************************************
+ * Generates the preamble itself, where each variable for that
+ * lexical level is declared
+ ****************************************************************/
 void preamble(int type, int symtab_entry, int sym_ntx_entry){
     int flag = 1;
     /* Indicates the type of the variable */
@@ -435,13 +461,19 @@ void preamble(int type, int symtab_entry, int sym_ntx_entry){
     }
 }
 
-/* Generates the end of the preamble and indicates the begin of the code itself */
+/****************************************************************
+ * Generates the end of the preamble and indicates the begin 
+ * of the code itself
+ ****************************************************************/
 void preambleend(void){
     printf(".end_decl\n\n");
     printf(".code:\n\n");
 }
 
-/* Indicates the end of the code and shows how many semantic errors occurred during the code */
+/****************************************************************
+ * Indicates the end of the code and shows how many semantic 
+ * errors occurred during the code
+ ****************************************************************/
 void endcode(int semantic_errors){
     printf("\n.end_code\n");
     printf("\tThere was %d semantic errors in this code\n\n", semantic_errors);
