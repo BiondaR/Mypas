@@ -215,9 +215,7 @@ void sub(int type)
 }
 
 /****************************************************************
- * The function below take the aux value to multiplicate the previus destination 
- * register in the function move and store the result in the same destination 
- * register.
+ * The function below take the aux value to multiplicate the acc accumulator.
  * With the direction of the data flow from left to right as intel processor.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
@@ -243,10 +241,7 @@ void mul(int type)
 }
 
 /****************************************************************
- * The function below take the aux value to divide the previus destination 
- * register in the function move, store the quotient in the same destination 
- * register and store the rest result in another register predetermined by 
- * local processor.
+ * The function below take the aux value to divide the acc accumulator.
  * With the direction of the data flow from left to right as intel processor.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
