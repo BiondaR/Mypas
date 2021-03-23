@@ -164,7 +164,7 @@ void pop(int type)
 
 /****************************************************************
  * The function below adds the value of aux to the acc accumulator.
- * With the direction of the data flow from left to right as intel processor.
+ * With the direction of the data flow from left to right.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
  ***************************************************************/
@@ -190,7 +190,7 @@ void add(int type)
 
 /****************************************************************
  * The function below takes the aux value to subtract the acc accumulator.
- * With the direction of the data flow from left to right as intel processor.
+ * With the direction of the data flow from left to right.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
  ***************************************************************/
@@ -216,7 +216,8 @@ void sub(int type)
 
 /****************************************************************
  * The function below take the aux value to multiplicate the acc accumulator.
- * With the direction of the data flow from left to right as intel processor.
+ * And the result is store in the acc.
+ * With the direction of the data flow from left to right.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
  ***************************************************************/
@@ -242,7 +243,8 @@ void mul(int type)
 
 /****************************************************************
  * The function below take the aux value to divide the acc accumulator.
- * With the direction of the data flow from left to right as intel processor.
+ * And the quocient/rest is store in the acc.
+ * With the direction of the data flow from left to right.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
  ***************************************************************/
