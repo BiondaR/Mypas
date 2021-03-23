@@ -481,21 +481,28 @@ int isrelop(void)
 int expr(int expr_type)
 {
     /**/int relop; int left_type, right_type;/**/
+    /* We put the parameter void to not induce type, and the function will do the proper type promotion */
     /**/left_type = /**/smpexpr(VOID);
+
+    /* Checks if it's a relational */
     if (isrelop()) {
         move(left_type, "acc", "aux");
         /**/relop = lookahead;/**/
+        /* Checks if the relational operator will be compatible, for this, expr_type must be boolean */
         /**/if (expr_type != BOOL) expr_type = INCOMPTBL;/**/
         
         match(lookahead);
+        /* left_type is already back with the proper type promotion */
         /**/right_type = /**/smpexpr(left_type);
+        /* Checks the compatibilty between left_type and right_type */
         /**/left_type = iscompat(left_type, right_type);/**/
-        
+        /* If it returns greater than zero, it means it's a valid type and they are compatible */
         /**/if (left_type > 0) {
             cmp(relop, right_type, "aux", "acc");
             return expr_type;
             }/**/
     } else {
+        /* Checks the compatibilty between expr_type and left_type */
         /**/expr_type = iscompat(expr_type, left_type);/**/
         
         
@@ -503,33 +510,41 @@ int expr(int expr_type)
     /**/return expr_type;/**/
 }
 
+/* This function is responsible for checking if type promotion will occur, passing the parameter from the parent to the child.*/
 /* smpexpr -> ['+''-'] term { (+) term } */
 int smpexpr(int smpexpr_type) 
 {
     /**/int signal = 0;/**/
+    /* If lookahead is a signal, checks the compatibilty between smpexpr_type and lookahead */
     if (lookahead == '+' || lookahead == '-' || lookahead == NOT) {
         /**/signal = lookahead;/**/
         /***/smpexpr_type = iscompat(smpexpr_type, signal);/***/
          
         match(lookahead);
     }
+    /* Gets the type of the term and checks if it is compatible with smpexpr_type */
     /***/int term_type = /***/ term(smpexpr_type);/**/smpexpr_type = iscompat(smpexpr_type, term_type);/**/
      
     /**/if (signal == '-' || signal == NOT) negate(smpexpr_type);/**/
+     /* Checks the compatibilty between smpexpr_type and term_type */
     /***/smpexpr_type = iscompat(smpexpr_type, term_type);/***/
     
     while ( lookahead == '+' || lookahead == '-' || lookahead == OR ) {
         /**/int oplus = lookahead;/**/
+        /* Checks the compatibilty between smpexpr_type and oplus and stores the value at the top of the stack*/
         /***/smpexpr_type = iscompat(smpexpr_type, oplus);/***/
         /**/push(smpexpr_type);/**/
         match (lookahead); 
         /***/term_type = /***/ term(smpexpr_type);
-        
+        /* Checks the compatibilty between smpexpr_type and term_type */
         /***/smpexpr_type = iscompat(smpexpr_type, term_type);/***/
+        /* Move the acc register to aux using the type smpexpr_type */
         /**/move(smpexpr_type, "acc", "aux");/**/
         
         /**/
+        /* Takes the value at top of the stack and stores it in acc with the smpexpr_type type */
         pop(smpexpr_type);
+        /* Does the addition or subtraction with the correct type */
         switch(oplus) {
             case '+':
                 add(smpexpr_type);
@@ -547,21 +562,26 @@ int smpexpr(int smpexpr_type)
 /* term -> fact { (*) fact } */
 int term(int term_type)
 { 
+    /* Gets the type of the fact and checks if it is compatible with term_type */
     /***/int fact_type = /***/fact(term_type); /**/term_type = iscompat(term_type, fact_type);/**/
-     
+    /* If lookahead is an otimes, checks the compatibilty between term_type and lookahead */ 
     while ( lookahead == '*' || lookahead == '/' || lookahead == DIV | lookahead == MOD | lookahead == AND ) {
         /**/int otimes = lookahead;/**/
+        /* Checks the compatibilty between term_type and otimes and stores the value at the top of the stack*/
         /***/term_type = iscompat(term_type, otimes);/***/
         /**/push(term_type);/**/
        
         match (lookahead); 
         columns = columncounter;
+        /* Gets the type of the fact and checks if it is compatible with term_type */
         /***/fact_type = /***/fact(term_type);
         /***/term_type = iscompat(term_type, fact_type);/***/
-        
+        /* Move the acc register to aux using the type term_type */
         /**/move(term_type, "acc", "aux");/**/
         /**/
+        /* Takes the value at top of the stack and stores it in acc with the term_type type */
         pop(term_type);
+        /* Does the multiplication or division with the correct type */
         switch(otimes) {
             case '*':
                 mul(term_type);
