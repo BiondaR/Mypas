@@ -216,7 +216,7 @@ void sub(int type)
 
 /****************************************************************
  * The function below take the aux value to multiplicate the acc accumulator.
- * And the result is store in the acc.
+ * And the result is stored in the acc.
  * With the direction of the data flow from left to right.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
@@ -243,7 +243,7 @@ void mul(int type)
 
 /****************************************************************
  * The function below take the aux value to divide the acc accumulator.
- * And the quocient/rest is store in the acc.
+ * And the result is stored in the acc.
  * With the direction of the data flow from left to right.
  * And write a pseudocode 
  * with the suffixes corresponding to the correct types
